@@ -4,8 +4,10 @@ const jwt = require('jsonwebtoken');
 const { verifyToken } = require('../helpers/verifyToken');
 const config = require('../config');
 
+//helpers
 const getGuests = require('../helpers/guests/getGuests');
 const addGuest = require('../helpers/guests/addGuest');
+const deleteGuest = require('../helpers/guests/deleteGuest');
 
 router.get('/', verifyToken, (req, res) => {
     //get all guests
@@ -44,9 +46,7 @@ router.delete('/:id', verifyToken, (req, res) => {
             res.json({ error: 'Forbidden' });
         }
         else {
-            res.json({
-                message: 'Guest has been deleted'
-            });
+            deleteGuest(req, res);
         }
     })
 });

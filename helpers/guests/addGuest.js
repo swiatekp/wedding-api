@@ -1,11 +1,14 @@
 const db = require('../db');
+const tokenGenerator = require('./tokenGenerator');
 
 module.exports = (req, res) => {
     const { firstName, surname, companionId } = req.body;
     if (firstName !== "" && surname !== "" && firstName !== undefined && surname !== undefined) {
         const nameRegex = /^[a-zęóąśłżźćń ]{2,30}$/i;
         if (nameRegex.test(firstName) && nameRegex.test(surname)) {
+            const token = tokenGenerator.getToken();
             if (companionId !== "" && companionId !== undefined) {
+                //check if companion with the given Id exists
                 db.get().collection('guests').find({ _id: db.mongo.ObjectID(companionId) }).toArray((err, guests) => {
                     if (err) {
                         res.status(500);
@@ -13,7 +16,6 @@ module.exports = (req, res) => {
                     }
                     else {
                         if (guests.length !== 0) {
-
                             //Remove companion from all other guests, so every guest may only have one companion
                             db.get().collection('guests').updateMany({
                                 companionId: db.mongo.ObjectID(companionId)
@@ -34,7 +36,8 @@ module.exports = (req, res) => {
                                             firstName, surname,
                                             confirmed: false,
                                             message: "",
-                                            companionId: db.mongo.ObjectID(companionId)
+                                            companionId: db.mongo.ObjectID(companionId),
+                                            token
                                         }, (err, guest) => {
                                             if (err) {
                                                 res.status(500);
@@ -48,12 +51,14 @@ module.exports = (req, res) => {
                                                 }
                                                 else {
                                                     //Find guests' companion and update its "companion" field
+                                                    //Companions share their confirmation-tokens, so the companions' token is updated
                                                     db.get().collection('guests').updateOne({
                                                         _id: db.mongo.ObjectID(companionId)
                                                     },
                                                         {
                                                             $set: {
-                                                                companionId: db.mongo.ObjectID(guest.insertedId)
+                                                                companionId: db.mongo.ObjectID(guest.insertedId),
+                                                                token
                                                             }
                                                         },
                                                         err => {
@@ -62,7 +67,7 @@ module.exports = (req, res) => {
                                                                 res.json('Internal server error');
                                                             }
                                                             else {
-                                                                res.json({ message: "Guest added successfully" });
+                                                                res.json({ message: "Gość został dodany pomyślnie. Token potwierdzający przybycie został zaktualizowany." });
                                                             }
                                                         });
                                                 }
@@ -87,7 +92,16 @@ module.exports = (req, res) => {
                     firstName, surname,
                     confirmed: false,
                     message: "",
-                    companionId: ""
+                    companionId: "",
+                    token
+                }, err=>{
+                    if(err) {
+                        res.status(500);
+                        res.json({error: 'Internal server error'});
+                    }
+                    else {
+                        res.json({error : 'User has been added successfully'});
+                    }
                 });
             }
         }
