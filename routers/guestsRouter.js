@@ -8,6 +8,7 @@ const config = require('../config');
 const getGuests = require('../helpers/guests/getGuests');
 const addGuest = require('../helpers/guests/addGuest');
 const deleteGuest = require('../helpers/guests/deleteGuest');
+const editGuest = require('../helpers/guests/editGuest');
 
 router.get('/', verifyToken, (req, res) => {
     //get all guests
@@ -58,9 +59,7 @@ router.put('/:id', verifyToken, (req, res) => {
             res.json({ error: 'Forbidden' });
         }
         else {
-            res.json({
-                message: 'Guest has been edited'
-            });
+            editGuest(req, res);
         }
     })
 });
