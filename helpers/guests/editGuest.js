@@ -23,15 +23,18 @@ module.exports = (req, res)=> {
     const updateGuest = (queryObject, setObject) => {
         return new Promise((resolve, reject)=> {
             //MATCHED COUNT!!!!!!!!!!!!!!!!!!!!!!!!
-            collection.updateOne(queryObject, setObject, err=> {
-                if(err) {
-                    reject({status: 500, error: 'Internal server error'});
-                }
-                else {
-                    resolve({message : 'Guest updated successfully'})
-                }            
-            })
-
+            const find = collection.updateOne(queryObject, setObject, (err, result)=> {
+                    if(err) {
+                        reject({status: 500, error: 'Internal server error'});
+                    }
+                    else if(result.matchedCount === 0) {
+                        reject({status: 404, error: 'Not found'});
+                    }
+                    else {
+                        console.log(`Update succeeded. Matched: ${result.matchedCount}. Modified: ${result.modifiedCount}`)
+                        resolve({message: 'Udało się'});
+                    }
+                })
         })
     }
     const respondWithAnError = (res, status, message)=> {
@@ -59,7 +62,7 @@ module.exports = (req, res)=> {
                 //if the name and surname suit the regex
                 const nameRegex = /^[a-zęóąśłżźćń ]{2,30}$/i;
                 if(nameRegex.test(firstName) && nameRegex.test(surname)) {
-                    resolve({firstName, surname, companionId, oldCompanionId : guest.companionId});
+                    resolve({firstName, surname, companionId, oldCompanionId : guest[0].companionId});
                 }
                 else {
                     reject({status: 400, error: 'Imię i nazwisko muszą składać się z liter i spacji'})
@@ -73,7 +76,7 @@ module.exports = (req, res)=> {
                 //User doesn't want to change the companion
                 updateGuest(
                     {
-                        _id : ObjectID(req.param.id)
+                        _id : ObjectID(req.params.id)
                     }, 
                     {
                         $set: {
@@ -92,7 +95,7 @@ module.exports = (req, res)=> {
                 //if req.body.companionId was set to null, remove the companion
                 updateGuest(
                     {
-                        _id : ObjectID(req.param.id)
+                        _id : ObjectID(req.params.id)
                     }, 
                     {
                         $set: {
@@ -103,7 +106,7 @@ module.exports = (req, res)=> {
                 .then(() => {
                     //when the guest is updated, update the companion
                     updateGuest({
-                        companionId : ObjectID(req.param.id)
+                        companionId : ObjectID(req.params.id)
                     },
                     {
                         $set: {
@@ -128,7 +131,7 @@ module.exports = (req, res)=> {
                 findGuest({
                     _id: ObjectID(companionId)
                 })
-                .then(companion => {
+                .then(() => {
                     //resolves, if there is such a companion
                     //update the guest
                     updateGuest({
@@ -136,24 +139,28 @@ module.exports = (req, res)=> {
                     },
                     {
                         $set: {
-                            firstName, surname, companionId
+                            firstName, surname, companionId : ObjectID(companionId)
                         }
                     })
                     .then(()=>{
+                        console.log(`Pierwszy update działa`);
                         //if the guest is updated successfully, update the companion
+                        console.log(companionId+" "+req.params.id);
                         updateGuest({
                             _id : ObjectID(companionId)
                         },
                         {
                             $set: {
-                                companionId : req.params.id
+                                companionId : ObjectID(req.params.id)
                             }
                         })
                         .then(()=> {
                             //check if companion had a companion, and update it
                             //guest may only bring one 
+                            console.log("Drugi update działa");
+                            console.log(oldCompanionId);
                             updateGuest({
-                                companionId : ObjectID(oldCompanionId)
+                                _id : ObjectID(oldCompanionId)
                             },
                             {
                                 $set: {
@@ -162,19 +169,20 @@ module.exports = (req, res)=> {
                             })
                             .then(resp=>{
                                 //success!
+                                console.log("Trzeci update działa");
                                 res.json({message: resp.message})
                             })
                             .catch(err => {
-                                respondWithAnError(res, err.status, err.error);
+                                respondWithAnError(res, err.status, err.error+"linia 171");
                             });
                             
                         })
                         .catch(err => {
-                            respondWithAnError(res, err.status, err.error);
+                            respondWithAnError(res, err.status, err.error+"linia 176");
                         });
                     })
                     .catch(err => {
-                        respondWithAnError(res, err.status, err.error);
+                        respondWithAnError(res, err.status, err.error+"linia 180");
                     });
                 })
                 .catch(err => {
