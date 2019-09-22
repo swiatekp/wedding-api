@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
                                     login,
                                     firstName,
                                     lastName
-                                }, config.jwtSecretKey, { expiresIn: '1h' }, (err, token) => {
+                                }, config.jwtSecretKey, { expiresIn: '3h' }, (err, token) => {
                                     if (err) {
                                         res.status(500);
                                         res.json({ error: 'Authentication failed - internal server error' });
