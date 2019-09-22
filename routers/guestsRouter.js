@@ -5,7 +5,10 @@ const { verifyToken } = require('../helpers/verifyToken');
 const config = require('../config');
 
 //helpers
-const getGuests = require('../helpers/guests/getGuests');
+const getGuests = require('../helpers/guests/getGuests'); //LIST OF ALL GUESTS - admin only
+const getGuestNonAdmin = require('../helpers/guests/getGuestNonAdmin'); //Get guest by name, surname and token
+const getGuestByIdAdmin = require('../helpers/guests/getGuestByIdAdmin'); // Get guests by id - version for admin
+const getGuestByIdNonAdmin = require('../helpers/guests/getGuestByIdNonAdmin'); //Get guest by id and token - version for guests
 const addGuest = require('../helpers/guests/addGuest');
 const deleteGuest = require('../helpers/guests/deleteGuest');
 const editGuest = require('../helpers/guests/editGuest');
@@ -15,8 +18,7 @@ router.get('/', verifyToken, (req, res) => {
     //admin only
     jwt.verify(req.token, config.jwtSecretKey, (err) => {
         if (err) {
-            res.status(403);
-            res.json({ error: 'Forbidden' });
+            getGuestNonAdmin(req, res);
         }
         else {
             getGuests(req, res);
@@ -24,8 +26,17 @@ router.get('/', verifyToken, (req, res) => {
     })
 });
 
-router.get('/:id', (req, res) => {
-    res.send('pobieranie konkretnego gościa-dostęp dla admina oraz po przekazaniu tokenu');
+router.get('/:id', verifyToken, (req, res) => {
+    jwt.verify(req.token, config.jwtSecretKey, (err) => {
+        if (err) {
+            //if not logged as admin, use the function with limited access
+            getGuestByIdNonAdmin(req, res);
+        }
+        else {
+            //if logged ass admin, use the function with unlimited access
+            getGuestByIdAdmin(req, res);
+        }
+    })
 });
 
 router.post('/', verifyToken, (req, res) => {

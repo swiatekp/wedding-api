@@ -1,44 +1,10 @@
 const db = require('../db');
+const findGuest = require('./findGuest');
+const updateGuest = require('./updateGuest');
+const respondWithAnError = require('./respondWithAnError');
 
 module.exports = (req, res) => {
-
-    const collection = db.get().collection('guests');
     const ObjectID = db.mongo.ObjectID;
-
-    const findGuest = (queryObject) => {
-        return new Promise((resolve, reject) => {
-            collection.find(queryObject).toArray((err, result) => {
-                if (err) {
-                    reject({ status: 500, error: 'Internal server error' })
-                }
-                else if (result.length === 0) {
-                    reject({ status: 404, error: 'Nie znaleziono gościa o podanym id' });
-                }
-                else {
-                    resolve(result);
-                }
-            })
-        });
-    }
-    const updateGuest = (queryObject, setObject, dontRejectIfNotFound = false) => {
-        return new Promise((resolve, reject) => {
-            collection.updateOne(queryObject, setObject, (err, result) => {
-                if (err) {
-                    reject({ status: 500, error: 'Internal server error' });
-                }
-                else if (result.matchedCount === 0 && dontRejectIfNotFound === false) {
-                    reject({ status: 404, error: 'Not found' });
-                }
-                else {
-                    resolve({ message: 'Udało się' });
-                }
-            })
-        })
-    }
-    const respondWithAnError = (res, status, message) => {
-        res.status(status);
-        res.json({ error: message })
-    }
     if (typeof req.params.id === "string" && req.params.id !== "") {
         findGuest({ _id: ObjectID(req.params.id) }) //find the guest with id given in req.params
             .then(guest => {
