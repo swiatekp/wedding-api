@@ -57,16 +57,21 @@ module.exports = (req, res) => {
                     }
                     //if the name and surname suit the regex
                     const nameRegex = /^[a-zęóąśłżźćń ]{2,30}$/i;
-                    if (nameRegex.test(firstName) && nameRegex.test(surname)) {
-                        if (ObjectID.isValid(companionId) || companionId === "" || companionId === null || companionId === "undefined") {
-                            resolve({ firstName, surname, companionId, oldCompanionId: guest[0].companionId.toString() });
+                    if (typeof firstName === "string" && typeof surname === "string") {
+                        if (nameRegex.test(firstName) && nameRegex.test(surname)) {
+                            if (ObjectID.isValid(companionId) || companionId === "" || companionId === null || companionId === "undefined") {
+                                resolve({ firstName, surname, companionId, oldCompanionId: guest[0].companionId.toString() });
+                            }
+                            else {
+                                reject({ status: 400, error: 'ID osoby towarzyszącej jest nieprawidłowe.' });
+                            }
                         }
                         else {
-                            reject({ status: 400, error: 'ID osoby towarzyszącej jest nieprawidłowe.' });
+                            reject({ status: 400, error: 'Imię i nazwisko muszą składać się z liter i spacji' })
                         }
                     }
                     else {
-                        reject({ status: 400, error: 'Imię i nazwisko muszą składać się z liter i spacji' })
+                        reject({ status: 400, error: 'Imię i nazwisko powinny być ciągami znaków' });
                     }
                 });
             })
