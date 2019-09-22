@@ -48,9 +48,6 @@ module.exports = (req, res) => {
                 //If they are, it resolves
                 return new Promise((resolve, reject) => {
                     let { firstName, surname, companionId } = req.body;
-                    // if (companionId === undefined) {
-                    //     companionId = "";
-                    // }
                     //if name and surname were not specified in req.body, let them stay the same
                     if (firstName === "" || firstName === "undefined") {
                         firstName = guest[0].firstName;
@@ -61,7 +58,12 @@ module.exports = (req, res) => {
                     //if the name and surname suit the regex
                     const nameRegex = /^[a-zęóąśłżźćń ]{2,30}$/i;
                     if (nameRegex.test(firstName) && nameRegex.test(surname)) {
-                        resolve({ firstName, surname, companionId, oldCompanionId: guest[0].companionId.toString() });
+                        if (ObjectID.isValid(companionId) || companionId === "" || companionId === null || companionId === "undefined") {
+                            resolve({ firstName, surname, companionId, oldCompanionId: guest[0].companionId.toString() });
+                        }
+                        else {
+                            reject({ status: 400, error: 'ID osoby towarzyszącej jest nieprawidłowe.' });
+                        }
                     }
                     else {
                         reject({ status: 400, error: 'Imię i nazwisko muszą składać się z liter i spacji' })
