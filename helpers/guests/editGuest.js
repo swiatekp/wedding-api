@@ -20,17 +20,16 @@ module.exports = (req, res) => {
             })
         });
     }
-    const updateGuest = (queryObject, setObject) => {
+    const updateGuest = (queryObject, setObject, dontRejectIfNotFound = false) => {
         return new Promise((resolve, reject) => {
             collection.updateOne(queryObject, setObject, (err, result) => {
                 if (err) {
                     reject({ status: 500, error: 'Internal server error' });
                 }
-                else if (result.matchedCount === 0) {
+                else if (result.matchedCount === 0 && dontRejectIfNotFound === false) {
                     reject({ status: 404, error: 'Not found' });
                 }
                 else {
-                    console.log(`Update succeeded. Matched: ${result.matchedCount}. Modified: ${result.modifiedCount}`)
                     resolve({ message: 'Udało się' });
                 }
             })
@@ -167,7 +166,6 @@ module.exports = (req, res) => {
                                             //update the old companion
                                             //If the new companion id is the same like old companion id, do nothing
                                             if (oldCompanionId !== companionId && oldCompanionId !== "") {
-
                                                 updateGuest({
                                                     _id: ObjectID(oldCompanionId)
                                                 },
@@ -177,11 +175,27 @@ module.exports = (req, res) => {
                                                         }
                                                     })
                                                     .then(resp => {
-                                                        //success!
-                                                        res.json({ message: resp.message })
+                                                        //Final step - check if the new companion had a companion and update it
+                                                        //Every guest can bring only one companion
+                                                        //The new companion is already added to our guest, so the query has to ommit it
+                                                        updateGuest({
+                                                            companionId: ObjectID(companionId),
+                                                            _id: { $not: { $eq: ObjectID(req.params.id) } }
+                                                        },
+                                                            {
+                                                                $set: {
+                                                                    companionId: ''
+                                                                }
+                                                            }, true)
+                                                            .then(resp => {
+                                                                res.json({ message: resp.message })
+                                                            })
+                                                            .catch(err => {
+                                                                respondWithAnError(res, errl.status, err.error);
+                                                            });
                                                     })
                                                     .catch(err => {
-                                                        respondWithAnError(res, err.status, err.error + "linia 171");
+                                                        respondWithAnError(res, err.status, err.error);
                                                     });
                                             }
                                             else {
