@@ -12,10 +12,11 @@ const getGuestByIdNonAdmin = require('../helpers/guests/getGuestByIdNonAdmin'); 
 const addGuest = require('../helpers/guests/addGuest');
 const deleteGuest = require('../helpers/guests/deleteGuest');
 const editGuest = require('../helpers/guests/editGuest');
+const confirmAdmin = require('../helpers/guests/confirmAdmin');
+const confirmNonAdmin = require('../helpers/guests/confirmNonAdmin');
 
 router.get('/', verifyToken, (req, res) => {
     //get all guests
-    //admin only
     jwt.verify(req.token, config.jwtSecretKey, (err) => {
         if (err) {
             getGuestNonAdmin(req, res);
@@ -74,9 +75,15 @@ router.put('/:id', verifyToken, (req, res) => {
         }
     })
 });
-router.put('/:id/confirm', (req, res) => {
-    //Potwierdzenie przybycia
-    //Tylko admin oraz użytkownik z tokenem
+router.put('/:id/confirm', verifyToken, (req, res) => {
+    jwt.verify(req.token, config.jwtSecretKey, (err) => {
+        if (err) {
+            confirmNonAdmin(req, res);
+        }
+        else {
+            confirmAdmin(req, res);
+        }
+    })
 });
 
 router.all('*', (req, res) => {
