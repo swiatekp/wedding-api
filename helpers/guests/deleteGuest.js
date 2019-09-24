@@ -1,45 +1,67 @@
 const db = require('../db');
+const updateGuest = require('./updateGuest');
+const respondWithAnError = require('./respondWithAnError');
+
+const deleteGuest = queryObject => {
+    const collection = db.get().collection('guests');
+    return new Promise((resolve, reject) => {
+        collection.deleteOne(queryObject, (err, guest) => {
+            console.log(guest);
+            if (err) {
+                reject({ status: 500, error: 'Internal server error' });
+            }
+            else if (guest.deletedCount === 0) {
+                reject({ status: 404, error: 'Nie znaleziono gościa' });
+            }
+            else {
+                resolve({ message: 'Gość usunięty pomyślnie' });
+            }
+        })
+    });
+}
 
 module.exports = (req, res) => {
-    if(req.params.id !== "" && req.params.id !== undefined) {
-        if(typeof req.params.id === "string" && req.params.id.length>0) {
-            //remove guest
-            db.get().collection('guests')
-                .deleteOne({_id : db.mongo.ObjectID(req.params.id)}, err=>{
-                    if(err) {
-                        res.status(500);
-                        res.json({error: 'Internal server error'})
+    const { id } = req.params;
+    if (id !== "" && id !== undefined) {
+        if (typeof id === "string" && id !== "") {
+            const ObjectID = db.mongo.ObjectID;
+            if (ObjectID.isValid(id)) {
+                //delete guest
+                deleteGuest(
+                    {
+                        _id: ObjectID(id)
                     }
-                    else {
-                        //update companionId to an empty string, if the deleted one had a companion
-                        db.get().collection('guests')
-                        .updateOne({
-                            companionId : db.mongo.ObjectID(req.params.id)
+                )
+                    .then(() => {
+                        //update guests' companion
+                        updateGuest({
+                            companionId: ObjectID(id)
                         },
-                        {
-                            $set: {
-                                companionId : ''
-                            }
-                        }, 
-                        err => {
-                            if(err) {
-                                res.status(500);
-                                res.json({error: 'Internal server error'})
-                            }
-                            else {
-                                res.json({message: 'Guest has been removed successfully'});
-                            }
-                        })
-                    }
-                });
+                            {
+                                $set: {
+                                    companionId: ''
+                                }
+                            }, true)
+                            .then(() => {
+                                res.json({ message: 'Usunięto gościa' });
+                            })
+                            .catch(err => {
+                                respondWithAnError(res, err.status, err.error);
+                            })
+                    })
+                    .catch(err => {
+                        respondWithAnError(res, err.status, err.error);
+                    });
+            }
+            else {
+                respondWithAnError(res, 400, "Podano nieprawidłowe id");
+            }
         }
         else {
-            res.status(400);
-            res.json({error: 'The id should be a non-empty string'});
+            respondWithAnError(res, 400, "Id powinno być niepustym stringiem");
         }
     }
     else {
-        res.status(400);
-        res.json({error: 'The request body should contain an id field'});
+        respondWithAnError(res, 400, "Nie podano id");
     }
 }
