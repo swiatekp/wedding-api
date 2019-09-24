@@ -1,117 +1,119 @@
 const db = require('../db');
 const tokenGenerator = require('./tokenGenerator');
+const findGuest = require('./findGuest');
+const updateGuest = require('./updateGuest');
+const respondWithAnError = require('./respondWithAnError');
+
+// W editGuest.js dodać zmianę tokenu przy zmianie osoby towarzyszącej 
+// W ogóle zastanowić się, czy to dobry pomysł
+
+const addGuest = queryObject => {
+    const collection = db.get().collection('guests');
+    return new Promise((resolve, reject) => {
+        collection.insertOne(queryObject, (err, guest) => {
+            if (err) {
+                reject({ status: 500, error: 'Internal server error' });
+            }
+            else {
+                resolve({ message: 'Gość dodany pomyślnie', insertedId: guest.insertedId });
+            }
+        })
+    });
+}
 
 module.exports = (req, res) => {
     const { firstName, surname, companionId } = req.body;
-    if (firstName !== "" && surname !== "" && firstName !== undefined && surname !== undefined) {
+    const ObjectID = db.mongo.ObjectID;
+    if (typeof firstName === "string" && firstName !== "" && typeof surname === "string" && surname !== "") {
         const nameRegex = /^[a-zęóąśłżźćń ]{2,30}$/i;
         if (nameRegex.test(firstName) && nameRegex.test(surname)) {
             const token = tokenGenerator.getToken();
             if (companionId !== "" && companionId !== undefined) {
-                //check if companion with the given Id exists
-                db.get().collection('guests').find({ _id: db.mongo.ObjectID(companionId) }).toArray((err, guests) => {
-                    if (err) {
-                        res.status(500);
-                        res.json({ error: "Internal server error" });
-                    }
-                    else {
-                        if (guests.length !== 0) {
-                            //Remove companion from all other guests, so every guest may only have one companion
-                            db.get().collection('guests').updateMany({
-                                companionId: db.mongo.ObjectID(companionId)
-                            },
-                                {
-                                    $set: {
-                                        companionId: ''
-                                    },
-                                },
-                                err => {
-                                    if (err) {
-                                        res.status(500);
-                                        res.json("Internal server error");
-                                    }
-                                    else {
-                                        //Insert new guest
-                                        db.get().collection('guests').insertOne({
-                                            firstName, surname,
-                                            confirmed: false,
-                                            message: "",
-                                            companionId: db.mongo.ObjectID(companionId),
-                                            token
-                                        }, (err, guest) => {
-                                            if (err) {
-                                                res.status(500);
-                                                res.json("Internal server error");
+                if (ObjectID.isValid(companionId)) {
+                    //Check if companion even exists
+                    findGuest({
+                        _id: ObjectID(companionId)
+                    })
+                        .then(companionFindGuestOutput => {
+                            //Add the main guest
+                            addGuest({
+                                firstName, surname,
+                                confirmed: "",
+                                message: "",
+                                companionId: ObjectID(companionId),
+                                token: companionFindGuestOutput[0].token //use companions' token, so both guests have the same one
+                            })
+                                .then(resp => {
+                                    //Dotąd wszystko działa
+                                    //Update the companion
+                                    updateGuest(
+                                        {
+                                            _id: ObjectID(companionId)
+                                        },
+                                        {
+                                            $set: {
+                                                companionId: ObjectID(resp.insertedId)
                                             }
-                                            else {
-
-                                                if (err) {
-                                                    res.status(500);
-                                                    res.json('Internal server error');
-                                                }
-                                                else {
-                                                    //Find guests' companion and update its "companion" field
-                                                    //Companions share their confirmation-tokens, so the companions' token is updated
-                                                    db.get().collection('guests').updateOne({
-                                                        _id: db.mongo.ObjectID(companionId)
-                                                    },
-                                                        {
-                                                            $set: {
-                                                                companionId: db.mongo.ObjectID(guest.insertedId),
-                                                                token
-                                                            }
-                                                        },
-                                                        err => {
-                                                            if (err) {
-                                                                res.status(500);
-                                                                res.json('Internal server error');
-                                                            }
-                                                            else {
-                                                                res.json({ message: "Gość został dodany pomyślnie. Token potwierdzający przybycie został zaktualizowany." });
-                                                            }
-                                                        });
-                                                }
-
-                                            }
-                                        });
-
-                                    }
-                                });
-
-                        }
-                        else {
-                            res.status(404);
-                            res.json({ error: "Companion not found" });
-                        }
-                    }
-                });
+                                        }
+                                    )
+                                        .then(() => {
+                                            //dotąd wszystko działa
+                                            //update companions' companion
+                                            updateGuest({
+                                                companionId: ObjectID(companionId)
+                                            },
+                                                {
+                                                    $set: {
+                                                        companionId: '',
+                                                        token: tokenGenerator.getToken()
+                                                    }
+                                                }, true)
+                                                .then(() => {
+                                                    res.json({ message: 'Gość został dodany pomyślnie' });
+                                                })
+                                                .catch(err => {
+                                                    respondWithAnError(res, err.status, err.error);
+                                                })
+                                        })
+                                        .catch(err => {
+                                            respondWithAnError(res, err.status, err.error);
+                                        })
+                                })
+                                .catch(err => {
+                                    respondWithAnError(res, err.status, err.error);
+                                })
+                        })
+                        .catch(err => {
+                            respondWithAnError(res, err.status, err.error);
+                        })
+                }
+                else {
+                    respondWithAnError(res, 400, 'Podano nieprawidłowe id osoby towarzyszącej');
+                }
             }
             else {
-                //If there is no companion id specified, insert guest without companion
-                db.get().collection('guests').insertOne({
+                //Guest comes without companion
+                addGuest({
                     firstName, surname,
-                    confirmed: false,
+                    confirmed: "",
                     message: "",
-                    companionId: "",
+                    companionId: '',
                     token
-                }, err=>{
-                    if(err) {
-                        res.status(500);
-                        res.json({error: 'Internal server error'});
-                    }
-                    else {
-                        res.json({error : 'User has been added successfully'});
-                    }
-                });
+                })
+                    .then(() => {
+                        //Dotąd wszystko działa
+                        res.json({ message: 'Gość został dodany pomyślnie' });
+                    })
+                    .catch(err => {
+                        respondWithAnError(res, err.status, err.error);
+                    })
             }
         }
         else {
-            res.status(400);
-            res.json({ error: "Name and surname should consist of letters and spaces only. Max length is 30 characters." });
+            respondWithAnError(res, 400, "Imię i nazwisko powinny składać się z liter i spacji");
         }
     }
     else {
-        res.status(400);
-        res.json({ error: "The request should contain at least first name and surname" });
+        respondWithAnError(res, 400, "Należy podać prawidłowe imię i nazwisko");
     }
 }
