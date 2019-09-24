@@ -1,5 +1,5 @@
 const db = require('../db');
-const findGuest = require('./findGuest');
+const findGuest = require('./dbOperationsHelpers/findGuest');
 const respondWithAnError = require('./respondWithAnError');
 
 module.exports = (req, res) => {

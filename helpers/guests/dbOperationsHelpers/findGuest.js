@@ -1,4 +1,4 @@
-const db = require('../db');
+const db = require('../../db');
 module.exports = queryObject => {
     const collection = db.get().collection('guests');
     return new Promise((resolve, reject) => {

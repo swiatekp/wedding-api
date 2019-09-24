@@ -1,25 +1,9 @@
 const db = require('../db');
 const tokenGenerator = require('./tokenGenerator');
-const findGuest = require('./findGuest');
-const updateGuest = require('./updateGuest');
+const findGuest = require('./dbOperationsHelpers/findGuest');
+const updateGuest = require('./dbOperationsHelpers/updateGuest');
+const addGuest = require('./dbOperationsHelpers/addGuest');
 const respondWithAnError = require('./respondWithAnError');
-
-// W editGuest.js dodać zmianę tokenu przy zmianie osoby towarzyszącej 
-// W ogóle zastanowić się, czy to dobry pomysł
-
-const addGuest = queryObject => {
-    const collection = db.get().collection('guests');
-    return new Promise((resolve, reject) => {
-        collection.insertOne(queryObject, (err, guest) => {
-            if (err) {
-                reject({ status: 500, error: 'Internal server error' });
-            }
-            else {
-                resolve({ message: 'Gość dodany pomyślnie', insertedId: guest.insertedId });
-            }
-        })
-    });
-}
 
 module.exports = (req, res) => {
     const { firstName, surname, companionId } = req.body;

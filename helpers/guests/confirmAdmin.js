@@ -1,5 +1,5 @@
 const db = require('../db');
-const updateGuest = require('./updateGuest');
+const updateGuest = require('./dbOperationsHelpers/updateGuest');
 const respondWithAnError = require('./respondWithAnError');
 
 module.exports = (req, res) => {

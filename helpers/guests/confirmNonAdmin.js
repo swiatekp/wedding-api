@@ -1,6 +1,6 @@
 const db = require('../db');
-const findGuest = require('./findGuest');
-const updateGuest = require('./updateGuest');
+const findGuest = require('./dbOperationsHelpers/findGuest');
+const updateGuest = require('./dbOperationsHelpers/updateGuest');
 const respondWithAnError = require('./respondWithAnError');
 
 module.exports = (req, res) => {
