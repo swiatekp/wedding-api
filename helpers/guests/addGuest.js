@@ -28,7 +28,7 @@ module.exports = (req, res) => {
                                 token: companionFindGuestOutput[0].token //use companions' token, so both guests have the same one
                             })
                                 .then(resp => {
-                                    //Dotąd wszystko działa
+                                    const insertedId = resp.insertedId;
                                     //Update the companion
                                     updateGuest(
                                         {
@@ -36,7 +36,7 @@ module.exports = (req, res) => {
                                         },
                                         {
                                             $set: {
-                                                companionId: ObjectID(resp.insertedId)
+                                                companionId: ObjectID(insertedId)
                                             }
                                         }
                                     )
@@ -44,7 +44,9 @@ module.exports = (req, res) => {
                                             //dotąd wszystko działa
                                             //update companions' companion
                                             updateGuest({
-                                                companionId: ObjectID(companionId)
+                                                companionId: ObjectID(companionId),
+                                                _id: { $not: { $eq: insertedId } }
+
                                             },
                                                 {
                                                     $set: {
@@ -68,6 +70,7 @@ module.exports = (req, res) => {
                                 })
                         })
                         .catch(err => {
+                            console.log(err);
                             respondWithAnError(res, err.status, err.error);
                         })
                 }

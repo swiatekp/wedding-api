@@ -2,6 +2,7 @@ const db = require('../db');
 const findGuest = require('./dbOperationsHelpers/findGuest');
 const updateGuest = require('./dbOperationsHelpers/updateGuest');
 const respondWithAnError = require('./respondWithAnError');
+const tokenGenerator = require('./tokenGenerator');
 
 module.exports = (req, res) => {
     const ObjectID = db.mongo.ObjectID;
@@ -70,7 +71,7 @@ module.exports = (req, res) => {
                         },
                         {
                             $set: {
-                                firstName, surname, companionId: ''
+                                firstName, surname, companionId: '', token: tokenGenerator.getToken()
                             }
                         }
                     )
@@ -107,30 +108,33 @@ module.exports = (req, res) => {
                     findGuest({
                         _id: ObjectID(companionId)
                     })
-                        .then(() => {
+                        .then(resp => {
                             //resolves, if there is such a companion
                             //update the guest
+                            const token = tokenGenerator.getToken();
                             updateGuest({
                                 _id: ObjectID(req.params.id)
                             },
                                 {
                                     $set: {
-                                        firstName, surname, companionId: ObjectID(companionId)
+                                        firstName, surname, companionId: ObjectID(companionId), token
                                     }
                                 })
-                                .then(() => {
+                                .then(resp => {
                                     //if the guest is updated successfully, update the companion
                                     updateGuest({
                                         _id: ObjectID(companionId)
                                     },
                                         {
                                             $set: {
-                                                companionId: ObjectID(req.params.id)
+                                                companionId: ObjectID(req.params.id),
+                                                token
                                             }
                                         })
                                         .then(resp => {
                                             //update the old companion
                                             //If the new companion id is the same like old companion id, do nothing
+                                            console.log(`Old companion: ${oldCompanionId}, new companion: ${companionId}`);
                                             if (oldCompanionId !== companionId && oldCompanionId !== "") {
                                                 updateGuest({
                                                     _id: ObjectID(oldCompanionId)
@@ -139,41 +143,55 @@ module.exports = (req, res) => {
                                                         $set: {
                                                             companionId: ''
                                                         }
-                                                    })
+                                                    }, true)
                                                     .then(resp => {
-                                                        //Final step - check if the new companion had a companion and update it
-                                                        //Every guest can bring only one companion
-                                                        //The new companion is already added to our guest, so the query has to ommit it
-                                                        updateGuest({
-                                                            companionId: ObjectID(companionId),
-                                                            _id: { $not: { $eq: ObjectID(req.params.id) } }
-                                                        },
-                                                            {
-                                                                $set: {
-                                                                    companionId: ''
-                                                                }
-                                                            }, true)
-                                                            .then(resp => {
-                                                                res.json({ message: resp.message })
-                                                            })
-                                                            .catch(err => {
-                                                                respondWithAnError(res, errl.status, err.error);
-                                                            });
+                                                        console.log('Linia 148')
+                                                        return new Promise((resolve, reject) => {
+                                                            resolve(resp);
+                                                        });
                                                     })
                                                     .catch(err => {
+                                                        console.log('Błąd')
                                                         respondWithAnError(res, err.status, err.error);
+                                                        return new Promise((resolve, reject) => {
+                                                            reject(error);
+                                                        });
                                                     });
                                             }
                                             else {
-                                                res.json({ message: resp.message })
+                                                return new Promise((resolve, reject) => {
+                                                    resolve(resp);
+                                                });
                                             }
-
                                         })
-                                        .catch(err => {
-                                            respondWithAnError(res, err.status, err.error);
-                                        });
+                                        .then(() => {
+                                            console.log('Final step');
+                                            //Final step - check if the new companion had a companion and update it
+                                            //Every guest can bring only one companion
+                                            //The new companion is already added to our guest, so the query has to ommit it
+                                            updateGuest({
+                                                companionId: ObjectID(companionId),
+                                                _id: { $not: { $eq: ObjectID(req.params.id) } }
+                                            },
+                                                {
+                                                    $set: {
+                                                        companionId: ''
+                                                    }
+                                                }, true)
+                                                .then(resp => {
+                                                    res.json({ message: resp.message })
+                                                })
+                                                .catch(err => {
+                                                    respondWithAnError(res, err.status, err.error);
+                                                });
+                                        })
+                                    // .catch(err => {
+                                    //     console.log(err);
+                                    //     respondWithAnError(res, err.status, err.error);
+                                    // });
                                 })
                                 .catch(err => {
+                                    // console.log(err);
                                     respondWithAnError(res, err.status, err.error);
                                 });
                         })
