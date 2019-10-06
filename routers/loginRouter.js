@@ -68,10 +68,10 @@ router.post('/', (req, res) => {
 router.get('/', verifyToken, (req, res) => {
     jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
         if (err) {
-            res.send("Tutaj będzie formularz logowania dupa");
+            res.send("Tutaj będzie formularz logowania");
         }
         else {
-            res.redirect('../access');
+            res.redirect('/admin');
         }
     })
 });
