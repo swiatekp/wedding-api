@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const db = require('../helpers/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
+const { verifyToken } = require('../helpers/verifyToken');
 
 router.post('/', (req, res) => {
     if (req.body) {
@@ -64,5 +65,18 @@ router.post('/', (req, res) => {
         res.json({ error: 'No request body has been sent' });
     }
 });
-
+router.get('/', verifyToken, (req, res) => {
+    jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
+        if (err) {
+            res.send("Tutaj będzie formularz logowania dupa");
+        }
+        else {
+            res.redirect('../access');
+        }
+    })
+});
+router.all('*', (req, res) => {
+    res.status('400');
+    res.json({ error: 'Bad request' });
+})
 module.exports = router;

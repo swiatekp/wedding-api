@@ -20,22 +20,22 @@ db.connect(err => {
 });
 
 //Middlewares
-app.use(express.static(path.join(__dirname, 'admin')));
 app.use(express.json());
 app.use('/api/guests/', guestsRouter);
 app.use('/login', loginRouter);
-
-app.get('/admin', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
+app.get('/access', verifyToken, (req, res) => {
+    //Admin-panel login
+    //First - uses /login to check if login and password are correct
+    //If they are - /login redirects here
+    //if logged in - /access gives access to the static /admin directory and redirects to it
+    jwt.verify(req.token, config.jwtSecretKey, (err) => {
         if (err) {
             res.status(403);
             res.json({ error: 'Forbidden' });
         }
         else {
-            res.json({
-                message: 'Logged in',
-                authData
-            });
+            app.use('/admin', express.static(path.join(__dirname, 'admin')));
+            res.redirect('../admin');
         }
     })
 });

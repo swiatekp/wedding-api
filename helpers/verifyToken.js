@@ -15,7 +15,12 @@ exports.verifyToken = (req, res, next) => {
         next();
     }
     else {
-        res.status(403);
-        res.json({ error: 'Forbidden' });
+        if (req._parsedOriginalUrl.path === '/login') {
+            res.json({ message: 'Tutaj będzie formularz logowania do panelu admina' });
+        }
+        else {
+            res.status(403);
+            res.json({ error: 'Forbidden' });
+        }
     }
 }
