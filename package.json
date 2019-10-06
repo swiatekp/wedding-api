@@ -13,6 +13,7 @@
     "get-random-values": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "react-router-dom": "^5.1.2"
   }
 }
