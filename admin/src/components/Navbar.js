@@ -13,6 +13,9 @@ const Navbar = () => {
                     <NavLink className="nav-link guests-icon" to='/guests'>Zarządzanie Gośćmi</NavLink>
                 </li>
                 <li>
+                    <NavLink className="nav-link approach-icon" to='/approach'>Wskazówki dojazdu</NavLink>
+                </li>
+                <li>
                     <NavLink className="nav-link account-icon" to='/account'>Twoje konto</NavLink>
                 </li>
             </ul>

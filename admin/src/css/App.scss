@@ -1,4 +1,8 @@
 $background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
 * {
     box-sizing: border-box;
     margin:0;
@@ -18,6 +22,7 @@ a {
     background-position:center 50vh;
 
     font-family: 'Palanquin', sans-serif;
+    color: $grey1;
 
     display:flex;
     flex-direction:column;
