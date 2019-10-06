@@ -7,13 +7,13 @@ const Navbar = () => {
         <nav>
             <ul>
                 <li>
-                    <NavLink className="nav-link settings-icon" to='./page'>Ustawienia strony</NavLink>
+                    <NavLink className="nav-link settings-icon" to='/'>Ustawienia strony</NavLink>
                 </li>
                 <li>
-                    <NavLink className="nav-link guests-icon" to='./guests'>Zarządzanie Gośćmi</NavLink>
+                    <NavLink className="nav-link guests-icon" to='/guests'>Zarządzanie Gośćmi</NavLink>
                 </li>
                 <li>
-                    <NavLink className="nav-link account-icon" to='./account'>Twoje konto</NavLink>
+                    <NavLink className="nav-link account-icon" to='/account'>Twoje konto</NavLink>
                 </li>
             </ul>
         </nav>
