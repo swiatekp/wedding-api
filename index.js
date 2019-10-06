@@ -1,8 +1,6 @@
 const express = require('express');
 const db = require('./helpers/db');
-const config = require('./config');
-const jwt = require('jsonwebtoken');
-const { verifyToken } = require('./helpers/verifyToken');
+const path = require('path');
 
 //Routers
 const guestsRouter = require('./routers/guestsRouter');
@@ -24,3 +22,4 @@ app.use(express.json());
 app.use('/api/guests/', guestsRouter);
 app.use('/login', loginRouter);
 app.use('/admin', adminRouter);
+app.use('/admin', express.static(path.join(__dirname, 'admin')));

@@ -15,7 +15,7 @@ exports.verifyToken = (req, res, next) => {
         next();
     }
     else {
-        if (req._parsedOriginalUrl.path === '/login') {
+        if (req.originalUrl.path === '/login') {
             res.json({ message: 'Tutaj będzie formularz logowania do panelu admina' });
         }
         else {
