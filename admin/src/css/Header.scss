@@ -1,0 +1,17 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+
+header {
+    text-align:center;
+    margin: 20px 0 20px 0;
+    color:$grey1;
+    flex:1;
+    h1 {
+        font-family:'Roboto Mono', cursive;
+        font-size: 20px;
+        font-weight:normal;
+    }
+}

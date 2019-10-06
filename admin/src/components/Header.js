@@ -1,7 +1,10 @@
 import React from 'react';
+import '../css/Header.scss';
 const Header = () => {
     return (
-        <p>Panel Administratora</p>
+        <header>
+            <h1>Panel Administratora</h1>
+        </header>
     );
 }
 
