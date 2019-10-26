@@ -6,6 +6,7 @@ const path = require('path');
 const guestsRouter = require('./routers/guestsRouter');
 const loginRouter = require('./routers/loginRouter');
 const adminRouter = require('./routers/adminRouter');
+const pageRouter = require('./routers/pageRouter');
 
 //Express setup
 const app = express();
@@ -22,4 +23,5 @@ app.use(express.json());
 app.use('/api/guests/', guestsRouter);
 app.use('/login', loginRouter);
 app.use('/admin', adminRouter);
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
+app.use('/admin', express.static(path.join(__dirname, 'admin'))); //When adminRouter verifies, if the user is logged in, it uses next() to run another middleware - 
+app.use('/page', pageRouter);
