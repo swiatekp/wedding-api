@@ -4,7 +4,7 @@ module.exports = date => {
     //date must be given in a YYYY-MM-DD format
     //i could simply have put the month, day and year in Date(), but it wouldn't return any error, if the date was wrong.
 
-    const dateRegex = /^20[0-9][0-9]-[01][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]$/;;
+    const dateRegex = /^20[0-9][0-9]-[01][0-9]-[0-3][0-9]T[0-2][0-9]:[0-6][0-9]$/;
     if (dateRegex.test(date)) {
         currentDate = new Date();
 

@@ -13,12 +13,13 @@ router.get('/', (req, res) => {
     const collection = db.get().collection('pageInfo');
     collection.find({}).toArray((err, result) => {
         if (err) {
-            respondWithAnError(res, 500, "Internal server error");
+            respondWithAnError(res, 500, "Wewnętrzny błąd serwera");
         }
         else if (result.length === 0) {
-            respondWithAnError(res, 404, "Not found");
+            respondWithAnError(res, 404, "Nie znaleziono");
         }
         else {
+            delete result[0]._id; //It's not neccessary to let the client know, what the _id is. 
             res.json(result[0]);
         }
     });
@@ -27,7 +28,7 @@ router.put('/', verifyToken, (req, res) => {
     const collection = db.get().collection('pageInfo');
     jwt.verify(req.token, config.jwtSecretKey, (err) => {
         if (err) {
-            respondWithAnError(res, 404, 'Forbidden');
+            respondWithAnError(res, 403, 'Brak dostępu');
         }
         else {
             const { pageTitle, weddingDate, brideName, brideTel, brideMail, groomName, groomTel, groomMail, landingpageText } = req.body;
@@ -54,7 +55,6 @@ router.put('/', verifyToken, (req, res) => {
                 else {
                     respondWithAnError(res, 400, "Nieprawidłowa data ślubu");
                 }
-
             }
             //bride name verification
             const nameRegex = /^[a-z0-9ęóąśłżźćń ]{2,30}$/i
@@ -117,36 +117,41 @@ router.put('/', verifyToken, (req, res) => {
             if (typeof landingpageText === "string" && landingpageText !== "") {
                 Object.assign(updateObject, { landingpageText });
             }
-            console.log(updateObject);
-            collection.updateOne(
-                {},
-                {
-                    $set: updateObject
-                },
-                (err, result) => {
-                    if (err) {
-                        respondWithAnError(res, 500, 'Internal server error');
+            //check if updateObject is empty
+            if (Object.keys(updateObject).length === 0 && updateObject.constructor === Object) {
+                respondWithAnError(res, 400, "Nieprawidłowe zapytanie do API");
+            }
+            else {
+                collection.updateOne(
+                    {},
+                    {
+                        $set: updateObject
+                    },
+                    (err, result) => {
+                        if (err) {
+                            respondWithAnError(res, 500, 'Wewnętrzny błąd serwera');
+                        }
+                        else if (result.matchedCount === 0) {
+                            //If there is no such document yet, add it
+                            collection.insertOne(updateObject, (err) => {
+                                if (err) {
+                                    respondWithAnError(res, 500, 'Wewnętrzny błąd serwera');
+                                }
+                                else {
+                                    res.json({ message: 'Udało się' });
+                                }
+                            });
+                        }
+                        else {
+                            res.json({ message: 'Udało się' });
+                        }
                     }
-                    else if (result.matchedCount === 0) {
-                        //If there is no such document yet, add it
-                        collection.insertOne(updateObject, (err) => {
-                            if (err) {
-                                respondWithAnError(res, 500, 'Internal server error');
-                            }
-                            else {
-                                res.json({ message: 'Udało się' });
-                            }
-                        });
-                    }
-                    else {
-                        res.json({ message: 'Udało się' });
-                    }
-                }
-            );
+                );
+            }
         }
     })
 });
 router.all('*', (req, res) => {
-    respondWithAnError(res, 400, 'Bad request');
+    respondWithAnError(res, 400, 'Nieprawidłowe zapytanie do API');
 })
 module.exports = router;

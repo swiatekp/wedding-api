@@ -20,6 +20,13 @@ db.connect(err => {
 
 //Middlewares
 app.use(express.json());
+app.use(function (req, res, next) {
+    //THIS IS A TEMPORARY CORS-RELATED PROBLEMS FIX. SHOULD BE REMOVED IN PRODUCTION VERSION
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "POST,GET,OPTIONS, PUT, DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization");
+    next();
+});
 app.use('/api/guests/', guestsRouter);
 app.use('/login', loginRouter);
 app.use('/admin', adminRouter);

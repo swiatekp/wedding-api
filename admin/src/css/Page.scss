@@ -70,3 +70,15 @@ textarea {
     font-size:30px;
     margin-bottom:30px;
 }
+.error {
+    border:2px solid $red !important;
+}
+.error-prompt {
+    text-align:center;
+    margin: 20px 0 20px 0;
+    color: $red;
+}
+.message-prompt {
+    text-align:center;
+    margin: 20px 0 20px 0;
+}
