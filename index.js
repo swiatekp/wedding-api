@@ -29,6 +29,8 @@ app.use(function (req, res, next) {
 });
 app.use('/api/guests/', guestsRouter);
 app.use('/login', loginRouter);
+app.use('/loginform', express.static(path.join(__dirname, 'loginform')));
 app.use('/admin', adminRouter);
-app.use('/admin', express.static(path.join(__dirname, 'admin'))); //When adminRouter verifies, if the user is logged in, it uses next() to run another middleware - 
+app.use('/admin', express.static(path.join(__dirname, 'admin/build'))); //When adminRouter verifies, if the user is logged in, it uses next() to run another middleware - 
+app.use('/static', express.static(path.join(__dirname, 'admin/build/static')))
 app.use('/page', pageRouter);

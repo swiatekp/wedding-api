@@ -1,7 +1,9 @@
 exports.verifyToken = (req, res, next) => {
-    //get auth header value
-    const bearerHeader = req.headers['authorization'];
-    if (typeof bearerHeader !== 'undefined') {
+    //bearer can be passed in two ways
+    //first - by header (fetch etc)
+    //second - by query params - by frontend
+    if (typeof req.headers['authorization'] !== "undefined") {
+        const bearerHeader = req.headers['authorization'];
         // Format of the token:
         // Authorization: Bearer <access_token>
         // Split at the space to get the token out of the string
@@ -14,13 +16,17 @@ exports.verifyToken = (req, res, next) => {
         //Next middleware
         next();
     }
+    else if (req.query['bearer']) {
+        req.token = req.query['bearer'];
+        next();
+    }
     else {
         if (req.originalUrl.path === '/login') {
-            res.json({ message: 'Tutaj będzie formularz logowania do panelu admina' });
+            res.redirect('/loginform');
         }
         else {
             res.status(403);
-            res.json({ error: 'Forbidden' });
+            res.json({ error: 'Brak dostępu' });
         }
     }
 }

@@ -196,7 +196,7 @@ class Page extends Component {
             fetch(`${config().apiUrl}/page`, {
                 method: 'PUT',
                 headers: {
-                    "Authorization": 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6ImFkbWluIiwiZmlyc3ROYW1lIjoiUGlvdHIiLCJsYXN0TmFtZSI6IsWad2nEhXRlayIsImlhdCI6MTU3MjE2MTE0NCwiZXhwIjoxNTcyMTcxOTQ0fQ.31AanbYcdfhTQ_iZtSelEKnO9NaWM53jD1ZUWRO16SM',
+                    "Authorization": `Bearer ${this.props.bearer}`,
                     "Content-type": "application/json; charset=UTF-8"
                 },
                 body: JSON.stringify(this.state.form)

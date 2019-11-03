@@ -18,7 +18,7 @@ router.post('/', (req, res) => {
                         }
                         else if (admin.length !== 1) {
                             res.status(401);
-                            res.json({ error: 'No such login' });
+                            res.json({ error: 'Zły login' });
                         }
                         else {
                             const passwordHashed = crypto.createHash('sha256').update(req.body.password).digest('hex');
@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
                                 }, config.jwtSecretKey, { expiresIn: '3h' }, (err, token) => {
                                     if (err) {
                                         res.status(500);
-                                        res.json({ error: 'Authentication failed - internal server error' });
+                                        res.json({ error: 'Wewnętrzny błąd serwera' });
                                     }
                                     else {
                                         res.json({ token });
@@ -40,24 +40,24 @@ router.post('/', (req, res) => {
                             }
                             else {
                                 res.status(401);
-                                res.json({ error: 'Wrong password' });
+                                res.json({ error: 'Nieprawidłowe hasło' });
                             }
                         }
                     });
                 }
                 else {
                     res.status(400);
-                    res.json({ error: 'Login and password should not be empty strings' });
+                    res.json({ error: 'Login i hasło nie mogą być puste' });
                 }
             }
             else {
                 res.status(400);
-                res.json({ error: 'Login and password should be strings.' })
+                res.json({ error: 'Login i hasło powinny być ciągami znaków' })
             }
         }
         else {
             res.status(400);
-            res.json({ error: 'No login and password specified in the request body' });
+            res.json({ error: 'Nie podano loginu i hasła' });
         }
     }
     else {
@@ -68,7 +68,7 @@ router.post('/', (req, res) => {
 router.get('/', verifyToken, (req, res) => {
     jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
         if (err) {
-            res.send("Tutaj będzie formularz logowania");
+            res.redirect('/loginform');
         }
         else {
             res.redirect('/admin');

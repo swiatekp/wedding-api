@@ -15,7 +15,6 @@ router.get('/*', verifyToken, (req, res, next) => {
             //there are two middlewares in index.js that use /admin path
             //first one is this one. It checks if the user is logged in
             //If it is - use the next middleware - static folder with admin panel frontend
-            console.log('AdminRouter - OK');
             next();
         }
     })
