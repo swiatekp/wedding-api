@@ -11,14 +11,15 @@ module.exports = (req, res) => {
             }
             else {
                 const guestsToSend = guests.map(guest => {
-                    const { _id, firstName, surname, confirmed, message, companionId } = guest;
+                    const { _id, firstName, surname, confirmed, message, companionId, token } = guest;
                     guestToSend = {
                         _id,
                         firstName,
                         surname,
                         confirmed,
                         message,
-                        companionId
+                        companionId,
+                        token
                     }
                     return guestToSend;
                 })

@@ -1,0 +1,44 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+$rose2: rgb(252, 229, 248);
+$red: #fa9999;
+.edit-guest-container {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.localization {
+    margin-bottom:20px;
+}
+.localization>a {
+    color: $grey3;
+}
+.localization>a:hover {
+    color: $rose;
+}
+.edit-guest-form {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-row-gap:10px;
+}
+.companion-link {
+    margin-top:20px;
+    padding-left:50px;
+    display:flex;
+    align-items:center;
+    background-image:url('../img/dancing-couple.svg');
+    background-position: top left;
+    background-repeat:no-repeat;
+    background-size:40px 40px;
+    height:40px;
+    font-family:'Parisienne';
+    font-size:18px;
+    color: $grey1;
+}
+.companion-link:hover {
+    background-image:url('../img/dancing-couple-hover.svg');
+    color:$rose;
+}

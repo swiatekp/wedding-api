@@ -25,7 +25,7 @@ module.exports = (req, res) => {
                     const nameRegex = /^[a-zęóąśłżźćń ]{2,30}$/i;
                     if (typeof firstName === "string" && typeof surname === "string") {
                         if (nameRegex.test(firstName) && nameRegex.test(surname)) {
-                            if (ObjectID.isValid(companionId) || companionId === "" || companionId === null || companionId === "undefined") {
+                            if (ObjectID.isValid(companionId) || companionId === "" || companionId === null || companionId === undefined) {
                                 resolve({ firstName, surname, companionId, oldCompanionId: guest[0].companionId.toString() });
                             }
                             else {

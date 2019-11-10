@@ -1,0 +1,111 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+$rose2: rgb(252, 229, 248);
+$red: #fa9999;
+.guests-container {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.guests-table td {
+    border: 1px solid $grey2;
+    color:$grey1;
+    padding: 5px 10px 5px 10px;
+    min-height:45px;
+}
+.guests-table>thead {
+    font-weight:bold;
+}
+.center {
+    text-align:center;
+}
+.noborder {
+    border-style:none;
+}
+.hideOnMobile {
+    display:none;
+    @media(min-width:530px) {
+        display:table-cell;
+    }
+}
+.operations-cell {
+    border:none !important;
+}
+.edit-button {
+    display:inline-block;
+    width:20px;
+    height:20px;
+    border:none;
+    background-image:url('../img/edit.svg');
+    margin-right:3px;
+}
+.edit-button:hover {
+    background-image:url('../img/edit-hover.svg');
+    border:none;
+    background-color:transparent;
+}
+.remove-button {
+    width:20px;
+    height:20px;
+    border:none;
+    background-image:url('../img/remove.svg');
+    margin-right:3px;
+}
+.remove-button:hover {
+    background-image:url('../img/remove-hover.svg');
+    border:none;
+    background-color:transparent;
+}
+
+.pagination-container {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin: 20px 0 20px 0;
+}
+.pagination-button {
+    width:20px;
+    height:20px;
+    margin:0 5px 0 0;
+    font-size:11px;
+}
+.pagination-button:last-child {
+    margin:0;
+}
+.pagination-button:hover {
+    font-size:11px;
+}
+.pagination-button-active {
+    background-color: $rose2;
+    border-width:2px;
+}
+.pagination-input {
+    width:40px;
+    margin: 0 5px 0 5px;
+    padding:0;
+    text-align:center;
+}
+.addGuest-form {
+    margin: 40px 0 0 0;
+    display:flex;
+    flex-direction:column;
+}
+.addGuest-form>input, .addGuest-form>select {
+    margin-bottom:20px;
+}
+input[type=search] {
+    background-image:url('../img/search.svg');
+    background-repeat:no-repeat;
+    background-size: 15px 15px;
+    background-position: 5px center;
+    padding-left:25px;
+    margin-bottom:20px;
+}
+input[type=search]:focus {
+    background-image:url('../img/search-hover.svg');
+    background-repeat:no-repeat;
+}

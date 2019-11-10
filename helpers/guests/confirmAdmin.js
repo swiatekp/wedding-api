@@ -7,7 +7,7 @@ module.exports = (req, res) => {
     const { id } = req.params;
     const { confirmed } = req.body;
     if (ObjectID.isValid(id)) {
-        if (typeof confirmed == "boolean") {
+        if (typeof confirmed === "boolean" || confirmed === "") {
             updateGuest(
                 { _id: ObjectID(id) },
                 {
@@ -24,7 +24,7 @@ module.exports = (req, res) => {
                 });
         }
         else {
-            respondWithAnError(res, 400, "Zawartość req.body.confirmed powinna być typu boolean");
+            respondWithAnError(res, 400, "Zawartość req.body.confirmed powinna być typu boolean albo pustym stringiem");
         }
     }
     else {
