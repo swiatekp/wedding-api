@@ -186,7 +186,7 @@ class Guests extends Component {
         const regex = /^[a-zęóąśłżźćń ]{0,30}$/i;
         const searchQuery = e.target.value;
         if (typeof searchQuery === "string" && regex.test(searchQuery)) {
-            this.setState({ searchQuery });
+            this.setState({ searchQuery, pageNumber: 0 });
         }
     }
     render() {
