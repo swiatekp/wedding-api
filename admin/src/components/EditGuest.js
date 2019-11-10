@@ -111,10 +111,12 @@ class EditGuest extends Component {
         if (e.target.value === "true") {
             value = true;
         }
-        else if (e.target.value = "false") {
+        else if (e.target.value === "false") {
             value = false;
         }
 
+        console.log(value);
+        console.log(this.state.editedGuest.confirmed);
         this.setState(prevState => ({
             ...prevState,
             editedGuest: {
