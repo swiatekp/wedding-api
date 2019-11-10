@@ -16,9 +16,8 @@ module.exports = date => {
         const month = parseInt(yearDayMonth[1]);
         const day = parseInt(yearDayMonth[2]);
 
-        console.log(hoursMinutes);
         hoursMinutes = hoursMinutes.split(":");
-        console.log(hoursMinutes);
+
         const hours = parseInt(hoursMinutes[0]);
         const minutes = parseInt(hoursMinutes[1]);
 
@@ -27,7 +26,6 @@ module.exports = date => {
                 switch (month) {
                     case 1: {
                         if (day >= 1 && day <= 31) {
-                            console.log('Elo');
                             return new Date(year, month - 1, day, hours, minutes);
                         }
                         else {

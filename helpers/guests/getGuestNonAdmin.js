@@ -21,9 +21,6 @@ module.exports = (req, res) => {
             })
     }
     else {
-        console.log(firstName);
-        console.log(surname);
-        console.log(token);
         respondWithAnError(res, 400, "Nieprawidłowe zapytanie");
     }
 }

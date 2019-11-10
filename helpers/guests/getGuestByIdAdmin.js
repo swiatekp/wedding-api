@@ -11,7 +11,6 @@ module.exports = (req, res) => {
                 res.json(result[0]);
             })
             .catch(err => {
-                console.log(err);
                 respondWithAnError(res, err.status, err.error);
             });
     }

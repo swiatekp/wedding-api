@@ -134,7 +134,6 @@ module.exports = (req, res) => {
                                         .then(resp => {
                                             //update the old companion
                                             //If the new companion id is the same like old companion id, do nothing
-                                            console.log(`Old companion: ${oldCompanionId}, new companion: ${companionId}`);
                                             if (oldCompanionId !== companionId && oldCompanionId !== "") {
                                                 updateGuest({
                                                     _id: ObjectID(oldCompanionId)
@@ -145,13 +144,11 @@ module.exports = (req, res) => {
                                                         }
                                                     }, true)
                                                     .then(resp => {
-                                                        console.log('Linia 148')
                                                         return new Promise((resolve, reject) => {
                                                             resolve(resp);
                                                         });
                                                     })
                                                     .catch(err => {
-                                                        console.log('Błąd')
                                                         respondWithAnError(res, err.status, err.error);
                                                         return new Promise((resolve, reject) => {
                                                             reject(error);
@@ -165,7 +162,6 @@ module.exports = (req, res) => {
                                             }
                                         })
                                         .then(() => {
-                                            console.log('Final step');
                                             //Final step - check if the new companion had a companion and update it
                                             //Every guest can bring only one companion
                                             //The new companion is already added to our guest, so the query has to ommit it
@@ -185,13 +181,11 @@ module.exports = (req, res) => {
                                                     respondWithAnError(res, err.status, err.error);
                                                 });
                                         })
-                                    // .catch(err => {
-                                    //     console.log(err);
-                                    //     respondWithAnError(res, err.status, err.error);
-                                    // });
+                                        .catch(err => {
+                                            respondWithAnError(res, err.status, err.error);
+                                        });
                                 })
                                 .catch(err => {
-                                    // console.log(err);
                                     respondWithAnError(res, err.status, err.error);
                                 });
                         })
