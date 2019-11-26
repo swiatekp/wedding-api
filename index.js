@@ -8,6 +8,7 @@ const loginRouter = require('./routers/loginRouter');
 const adminRouter = require('./routers/adminRouter');
 const pageRouter = require('./routers/pageRouter');
 const accountRouter = require('./routers/accountRouter');
+const approachTipsRouter = require('./routers/approachTipsRouter');
 
 //Express setup
 const app = express();
@@ -37,3 +38,5 @@ app.use('/static', express.static(path.join(__dirname, 'admin/build/static')));
 app.use('/admin/*', express.static(path.join(__dirname, 'admin/build')));
 app.use('/page', pageRouter);
 app.use('/account', accountRouter);
+app.use('/api/approach-tips', approachTipsRouter);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

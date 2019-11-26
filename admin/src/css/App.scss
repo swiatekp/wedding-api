@@ -36,7 +36,14 @@ h2 {
     font-family: 'Parisienne', cursive;
     font-weight: normal;
     font-size:30px;
-    margin-bottom:30px;
+    margin-bottom:20px;
+}
+h3 {
+    text-align:center;
+    font-family: 'Parisienne', cursive;
+    font-weight: normal;
+    font-size:20px;
+    margin-bottom:10px;
 }
 button {
     border:1px solid $grey1;
@@ -56,15 +63,19 @@ button:focus {
     outline:none;
 }
 .error-prompt {
+    font-family: 'Roboto Mono';
+    font-size: 15px;
     text-align:center;
     margin: 20px 0 20px 0;
     color: $red;
 }
 .message-prompt {
+    font-family: 'Roboto Mono';
+    font-size: 15px;
     text-align:center;
     margin: 20px 0 20px 0;
 }
-input, select {
+input, select, textarea {
     height:25px;
     @media(min-width: 800px) {
         width:300px;
@@ -75,7 +86,10 @@ input, select {
     padding: 5px 10px 5px 10px;
     transition: 0.3s;
 }
-select {
+textarea {
+    height: 80px;
+}
+select, input[type=file] {
     height:30px;
 }
 option:hover {
@@ -85,7 +99,7 @@ textarea {
     height:100px !important;
     resize:none;
 }
-input:focus, select:focus{
+input:focus, select:focus, textarea:focus{
     background-color: $rose2;
     border:1px solid $grey3;
     outline:none;

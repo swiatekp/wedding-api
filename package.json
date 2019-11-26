@@ -9,10 +9,12 @@
   "author": "Piotr \"Świątek\" Świąteczny",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "get-random-values": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.3.0",
+    "multer": "^1.4.2",
     "path": "^0.12.7",
     "react-router-dom": "^5.1.2"
   }
