@@ -5,14 +5,13 @@ const path = require('path');
 const insertTip = require('./dbOperationsHelpers/insertTip');
 const respondWithAnError = require('../guests/respondWithAnError');
 
-const dateNow = Date.now();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './uploads');
     },
     filename: (req, file, cb) => {
-        const filename = `approach-tips-${dateNow}${path.extname(file.originalname)}`;
+        const filename = `approach-tips-${Date.now()}${path.extname(file.originalname)}`;
         req.filename = filename;
         cb(null, filename);
     }
@@ -22,11 +21,9 @@ const upload = multer({
     storage: storage,
     fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname);
-        const filename = `approach-tips-${dateNow}${ext}`;
         if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg' && ext !== '.gif') {
             return cb(new Error('Dozwolone są tylko pliki typu: jpg, jpeg, png i gif.'));
         }
-        req.filename = filename;
 
         return cb(null, true);
     },

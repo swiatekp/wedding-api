@@ -7,7 +7,7 @@ module.exports = queryObject => {
                 reject({ status: 500, error: 'Internal server error' })
             }
             else if (result.length === 0) {
-                reject({ status: 404, error: 'Nie znaleziono wskazówek spełniających dane kryteria' });
+                reject({ status: 404, error: 'Brak wskazówek' });
             }
             else {
                 resolve(result);

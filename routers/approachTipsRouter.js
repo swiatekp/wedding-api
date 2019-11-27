@@ -11,6 +11,7 @@ const post = require('../helpers/approachTips/post');
 const getAllTips = require('../helpers/approachTips/getAllTips');
 const getTipsByCategory = require('../helpers/approachTips/getTipsByCategory');
 const getTipsById = require('../helpers/approachTips/getTipsById');
+const deleteTip = require('../helpers/approachTips/deleteTip');
 
 module.exports = router;
 
@@ -58,3 +59,14 @@ router.post('/', verifyToken, (req, res) => {
         }
     });
 });
+router.delete('/:id', verifyToken, (req, res) => {
+    //remove tip
+    jwt.verify(req.token, config.jwtSecretKey, (err) => {
+        if (err) {
+            respondWithAnError(res, 403, 'Brak dostępu');
+        }
+        else {
+            deleteTip(req, res);
+        }
+    });
+})

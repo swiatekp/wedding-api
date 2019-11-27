@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/Approach.scss';
 import { NavLink } from 'react-router-dom';
 import config from '../config';
-
+import noMiniature from '../img/no-miniature.svg';
 class Approach extends Component {
     state = {
         form: {
@@ -12,8 +12,14 @@ class Approach extends Component {
         },
         message: '',
         error: '',
+
         weddingTips: [],
-        partyTips: []
+        weddingTipsPageNumber: 0,
+        weddingTipsRecordsPerPage: 5,
+
+        partyTips: [],
+        partyTipsPageNumber: 0,
+        partyTipsRecordsPerPage: 5,
     }
     componentDidMount() {
         this.fetchTips();
@@ -88,6 +94,28 @@ class Approach extends Component {
             }
         }))
     }
+    removeTip = id => {
+        fetch(`${config().apiUrl}/api/approach-tips/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Authorization": `Bearer ${this.props.bearer}`,
+            },
+        })
+            .then(resp => resp.json())
+            .then(resp => {
+                if (resp.error) {
+                    throw new Error(resp.error);
+                }
+                else {
+                    this.clearPrompts();
+                    this.fetchTips();
+                }
+            })
+            .catch(err => {
+                this.setState({ error: err.message, message: '' });
+                this.clearPrompts();
+            })
+    }
     sendForm = e => {
         e.preventDefault();
         const { content, category, file } = this.state.form;
@@ -112,7 +140,14 @@ class Approach extends Component {
                             throw new Error(resp.error);
                         }
                         else {
-                            this.setState({ message: resp.message, error: '' });
+                            this.setState(prevState => ({
+                                ...prevState, message: resp.message, error: '',
+                                form: {
+                                    content: '',
+                                    category: '',
+                                    file: null,
+                                }
+                            }));
                             this.clearPrompts();
                             this.fetchTips();
                         }
@@ -136,62 +171,81 @@ class Approach extends Component {
         window.setTimeout(() => this.setState({ message: '', error: '' }), 7000)
     }
     render() {
-        const weddingTips = this.state.weddingTips.map((tip, key) => (
-            <tr key={key}>
-                <td className="">{key + 1}</td>
-                <td className="">{tip.content}</td>
-                <td className=""><img className="approach-miniature" src={`${config().apiUrl}/uploads/${tip.filename}`} /></td>
-                <td className="operations-cell">
-                    <NavLink to="" className="edit-button"></NavLink>
-                    <button className="remove-button"></button>
-                </td>
+        const weddingTips = this.state.weddingTips.map((tip, key) => {
+            let img = "";
+            tip.filename ? img = `${config().apiUrl}/uploads/${tip.filename}` : img = noMiniature;
+            return (
+                <tr key={key}>
+                    <td className="">{key + 1}</td>
+                    <td className="">{tip.content}</td>
+                    <td className=""><img className="approach-miniature" src={img} alt="Dojazd" /></td>
+                    <td className="operations-cell">
+                        <NavLink to="" className="edit-button"></NavLink>
+                        <button onClick={this.removeTip.bind(this.removeTip, tip._id)} className="remove-button"></button>
+                    </td>
 
-            </tr>
-        ));
-        const partyTips = this.state.partyTips.map((tip, key) => (
-            <tr key={key}>
-                <td className="">{key + 1}</td>
-                <td className="">{tip.content}</td>
-                <td className=""><img className="approach-miniature" src={`${config().apiUrl}/uploads/${tip.filename}`} /></td>
-                <td className="operations-cell">
-                    <NavLink to="" className="edit-button"></NavLink>
-                    <button className="remove-button"></button>
-                </td>
+                </tr>
+            )
+        });
+        const partyTips = this.state.partyTips.map((tip, key) => {
+            let img = "";
+            tip.filename ? img = `${config().apiUrl}/uploads/${tip.filename}` : img = noMiniature;
+            return (
+                <tr key={key}>
+                    <td className="">{key + 1}</td>
+                    <td className="">{tip.content}</td>
+                    <td className=""><img className="approach-miniature" src={img} alt="Dojazd" /></td>
+                    <td className="operations-cell">
+                        <NavLink to="" className="edit-button"></NavLink>
+                        <button onClick={this.removeTip.bind(this.removeTip, tip._id)} className="remove-button"></button>
+                    </td>
 
-            </tr>
-        ));
+                </tr>
+            )
+        });
         return (
             <div className="approach-container">
-                <h2>Wskazówki dojazdu</h2>
-                <h3>Ślub</h3>
-                <table className="approach-table">
-                    <thead>
-                        <tr>
-                            <td className="">Nr</td>
-                            <td className="">Treść</td>
-                            <td className="">Miniatura</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {weddingTips}
-                    </tbody>
-                </table>
-                <h3>Wesele</h3>
-                <table className="approach-table">
-                    <thead>
-                        <tr>
-                            <td className="">Nr</td>
-                            <td className="">Treść</td>
-                            <td className="">Miniatura</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {partyTips}
-                    </tbody>
-                </table>
-                <h2>Dodaj wskazówkę</h2>
+                {this.state.weddingTips.length !== 0 && this.state.partyTips !== 0 ?
+                    <h2>Wskazówki dojazdu</h2> : null
+                }
+                {
+                    this.state.weddingTips.length !== 0 ?
+                        <>
+                            <h3>Ślub</h3>
+                            <table className="approach-table">
+                                <thead>
+                                    <tr>
+                                        <td className="">Nr</td>
+                                        <td className="">Treść</td>
+                                        <td className="">Miniatura</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {weddingTips}
+                                </tbody>
+                            </table>
+                        </> : null
+                }
+                {
+                    this.state.partyTips.length !== 0 ?
+                        <>
+                            <h3>Wesele</h3>
+                            <table className="approach-table">
+                                <thead>
+                                    <tr>
+                                        <td className="">Nr</td>
+                                        <td className="">Treść</td>
+                                        <td className="">Miniatura</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {partyTips}
+                                </tbody>
+                            </table>
+                        </> : null}
                 {this.state.message !== "" ? <h3 className="message-prompt">{this.state.message}</h3> : null}
                 {this.state.error !== "" ? <h3 className="error-prompt">{this.state.error}</h3> : null}
+                <h2>Dodaj wskazówkę dojazdu</h2>
                 <form className="add-approach-tip-form">
                     <label htmlFor="content">Treść wskazówki</label>
                     <textarea id="content" onChange={this.contentChangeHandler} value={this.state.form.content}></textarea>
