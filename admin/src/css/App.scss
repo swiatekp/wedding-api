@@ -21,7 +21,8 @@ a {
     background-color: $background;
     background-image:url('./../img/bg.png');
     background-repeat:no-repeat;
-    background-position:center 50vh;
+    background-position:center 30vh;
+    background-size:cover;
 
     font-family: 'Palanquin', sans-serif;
     color: $grey1;
@@ -106,4 +107,81 @@ input:focus, select:focus, textarea:focus{
 }
 .error {
     border:2px solid $red !important;
+}
+.edit-button {
+    display:inline-block;
+    width:20px;
+    height:20px;
+    border:none;
+    background-image:url('../img/edit.svg');
+    margin-right:3px;
+}
+.edit-button:hover {
+    background-image:url('../img/edit-hover.svg');
+    border:none;
+    background-color:transparent;
+}
+.remove-button {
+    width:20px;
+    height:20px;
+    border:none;
+    background-image:url('../img/remove.svg');
+    margin-right:3px;
+}
+.remove-button:hover {
+    background-image:url('../img/remove-hover.svg');
+    border:none;
+    background-color:transparent;
+}
+
+.pagination-container {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin: 20px 0 20px 0;
+}
+.pagination-button {
+    width:20px;
+    height:20px;
+    margin:0 5px 0 0;
+    font-size:11px;
+}
+.pagination-button:last-child {
+    margin:0;
+}
+.pagination-button:hover {
+    font-size:11px;
+}
+.pagination-button-active {
+    background-color: $rose2;
+    border-width:2px;
+}
+.pagination-input {
+    width:40px;
+    margin: 0 5px 0 5px;
+    padding:0;
+    text-align:center;
+}
+
+input[type=search] {
+    background-image:url('../img/search.svg');
+    background-repeat:no-repeat;
+    background-size: 15px 15px;
+    background-position: 5px center;
+    padding-left:25px;
+    margin-bottom:20px;
+}
+input[type=search]:focus {
+    background-image:url('../img/search-hover.svg');
+    background-repeat:no-repeat;
+}
+.localization {
+    text-align:center;
+    margin-bottom:20px;
+}
+.localization>a {
+    color: $grey3;
+}
+.localization>a:hover {
+    color: $rose;
 }

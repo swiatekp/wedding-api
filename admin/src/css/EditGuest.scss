@@ -10,15 +10,6 @@ $red: #fa9999;
     flex-direction:column;
     align-items:center;
 }
-.localization {
-    margin-bottom:20px;
-}
-.localization>a {
-    color: $grey3;
-}
-.localization>a:hover {
-    color: $rose;
-}
 .edit-guest-form {
     display:grid;
     grid-template-columns:1fr 1fr;

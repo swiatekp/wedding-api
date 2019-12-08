@@ -4,6 +4,7 @@ import Page from './Page';
 import Guests from './Guests';
 import EditGuest from './EditGuest';
 import Approach from './Approach';
+import EditApproach from './EditApproach';
 import Account from './Account';
 import NotFound from './NotFound';
 
@@ -32,6 +33,7 @@ class Slider extends Component {
                         })
                         return component;
                     }}></Route>
+                    <Route path="/approach/edit/:id/" component={EditApproach}></Route>
                     <Route path="/approach" render={() => {
                         const component = React.createElement(Approach, {
                             bearer: this.bearer

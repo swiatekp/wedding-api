@@ -227,7 +227,7 @@ class EditGuest extends Component {
         })
         return (
             <div className="edit-guest-container">
-                <p className="localization"><NavLink to='/guests'>Zarządzanie gośćmi</NavLink> > <NavLink to={`/guests/edit/${_id}?bearer=${this.bearer}`}>{`${firstName} ${surname}`}</NavLink></p>
+                <p className="localization"><NavLink to={`/guests?bearer=${this.bearer}`}>Zarządzanie gośćmi</NavLink> > <NavLink to={`/guests/edit/${_id}?bearer=${this.bearer}`}>{`${firstName} ${surname}`}</NavLink></p>
                 <h2>Edycja gościa</h2>
                 {this.state.error === "" ? null : <h3 className="error-prompt">{this.state.error}</h3>}
                 {this.state.message === "" ? null : <h3 className="message-prompt">{this.state.message}</h3>}

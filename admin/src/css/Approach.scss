@@ -9,6 +9,7 @@ $red: #fa9999;
 .approach-container {
     display:flex;
     flex-direction:column;
+    align-items:center;
 }
 .approach-table {
     margin: 0 0 20px 0;
@@ -19,8 +20,18 @@ $red: #fa9999;
     padding: 5px 10px 5px 10px;
     min-height:45px;
 }
+.content-cell {
+   width:200px;
+}
 .operations-cell {
-    border:none !important;
+    border:none;
+}
+.approach-operations-container {
+    // border:none !important;
+    display:flex;
+    flex-direction:row;
+    flex-wrap:nowrap;
+    align-items:center;
 }
 .approach-miniature {
     width:50px;
@@ -37,4 +48,33 @@ $red: #fa9999;
 .add-approach-tip-form>label {
     margin:0;
     text-align:left;
+}
+.up-down-container {
+    display:flex;
+    flex-direction:column;
+}
+.up-button, .down-button {
+    width:15px;
+    height:15px;
+    border:0px;
+    background-size:15px 15px;
+    background-position:center center;
+}
+.up-button:hover, .down-button:hover {
+    background:transparent;
+    border:0;
+    background-size:15px 15px;
+    background-position:center center;
+}
+.up-button {
+    background-image:url('../img/up.svg');
+}
+.down-button {
+    background-image:url('../img/down.svg');
+}
+.up-button:hover {
+    background-image:url('../img/up-hover.svg');
+}
+.down-button:hover {
+    background-image:url('../img/down-hover.svg');
 }

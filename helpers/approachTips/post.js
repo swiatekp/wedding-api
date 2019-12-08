@@ -51,6 +51,7 @@ module.exports = (req, res) => {
                     res.json(resp);
                 })
                 .catch(err => {
+                    console.log(err);
                     if (req.filename) {
                         //error occured - the file that was uploaded, must be removed
                         fs.unlink(`./uploads/${req.filename}`, err => {
