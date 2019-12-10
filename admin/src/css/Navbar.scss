@@ -58,6 +58,12 @@ nav {
     .account-icon:hover {
         background-image:url('../img/mobile/account-hover.svg');
     }
+    .logout-icon {
+        background-image:url('../img/mobile/logout.svg');
+    }
+    .logout-icon:hover {
+        background-image:url('../img/mobile/logout-hover.svg');
+    }
     @media(min-width:600px) {
         .nav-link {
             color:$grey1;

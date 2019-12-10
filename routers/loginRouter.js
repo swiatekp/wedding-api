@@ -5,6 +5,7 @@ const db = require('../helpers/db');
 const config = require('../config');
 const jwt = require('jsonwebtoken');
 const { verifyToken } = require('../helpers/verifyToken');
+const logout = require('../helpers/logout');
 
 router.post('/', (req, res) => {
     if (req.body) {
@@ -75,6 +76,17 @@ router.get('/', verifyToken, (req, res) => {
         }
     })
 });
+router.get('/logout', verifyToken, (req, res) => {
+    jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
+        if (err) {
+            res.status(403);
+            res.json({ error: 'Brak dostępu' });
+        }
+        else {
+            logout(req, res);
+        }
+    })
+})
 router.all('*', (req, res) => {
     res.status('400');
     res.json({ error: 'Bad request' });

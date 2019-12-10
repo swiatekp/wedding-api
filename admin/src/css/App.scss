@@ -185,3 +185,14 @@ input[type=search]:focus {
 .localization>a:hover {
     color: $rose;
 }
+.loading-circle {
+    animation-name: spin;
+    animation-duration:3s;
+    animation-iteration-count:infinite;
+    animation-timing-function:linear;
+}
+@keyframes spin {
+    100% {
+        transform:rotate(360deg);
+    }
+}

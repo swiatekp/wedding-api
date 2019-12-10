@@ -6,6 +6,7 @@ import EditGuest from './EditGuest';
 import Approach from './Approach';
 import EditApproach from './EditApproach';
 import Account from './Account';
+import Logout from './Logout';
 import NotFound from './NotFound';
 
 import '../css/Slider.scss';
@@ -42,6 +43,12 @@ class Slider extends Component {
                     }}></Route>
                     <Route path="/account" render={() => {
                         const component = React.createElement(Account, {
+                            bearer: this.bearer
+                        })
+                        return component;
+                    }}></Route>
+                    <Route path="/logout" render={() => {
+                        const component = React.createElement(Logout, {
                             bearer: this.bearer
                         })
                         return component;

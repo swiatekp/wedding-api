@@ -10,13 +10,16 @@ const Navbar = (props) => {
                     <NavLink className="nav-link settings-icon" to={`/?bearer=${props.bearer}`}>Ustawienia strony</NavLink>
                 </li>
                 <li>
-                    <NavLink className="nav-link guests-icon" to={`/guests?bearer=${props.bearer}`}>Zarządzanie Gośćmi</NavLink>
+                    <NavLink className="nav-link guests-icon" to={`/guests?bearer=${props.bearer}`}>Goście</NavLink>
                 </li>
                 <li>
-                    <NavLink className="nav-link approach-icon" to={`/approach?bearer=${props.bearer}`}>Wskazówki dojazdu</NavLink>
+                    <NavLink className="nav-link approach-icon" to={`/approach?bearer=${props.bearer}`}>Dojazd</NavLink>
                 </li>
                 <li>
-                    <NavLink className="nav-link account-icon" to={`/account?bearer=${props.bearer}`}>Twoje konto</NavLink>
+                    <NavLink className="nav-link account-icon" to={`/account?bearer=${props.bearer}`}>Konto</NavLink>
+                </li>
+                <li>
+                    <NavLink className="nav-link logout-icon" to={`/logout?bearer=${props.bearer}`}>Wyloguj się</NavLink>
                 </li>
             </ul>
         </nav>
