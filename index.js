@@ -1,11 +1,10 @@
-const IS_PROD = false; //Enables things, that are required to keep the app running in development process.
-// set IS_PROD to true before deploying the app to the production
-
 const express = require('express');
 const session = require('express-session');
 const db = require('./helpers/db');
 const path = require('path');
+const config = require('./config');
 
+const IS_PROD = config.isProd;
 //Routers
 const guestsRouter = require('./routers/guestsRouter');
 const loginRouter = require('./routers/loginRouter');
@@ -33,7 +32,7 @@ app.use(session({
     name: 'sid',
     resave: false,
     saveUninitialized: false,
-    secret: 'DRŻYZESTRACHUCZERŃKOZACZA',
+    secret: config.secretKey,
     cookie: {
         maxAge: 3 * 60 * 60 * 1000,
         sameSite: true,

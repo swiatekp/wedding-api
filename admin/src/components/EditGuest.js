@@ -30,7 +30,7 @@ class EditGuest extends Component {
         }
     }
     getGuests = () => {
-        fetch(`${config().apiUrl}/api/guests/`, {
+        fetch(`${config().apiUrl}/api/guests/admin`, {
             method: 'GET'
         })
             .then(resp => resp.json())
@@ -165,7 +165,7 @@ class EditGuest extends Component {
                                 //Confirmation of guests' arrival - check if neccessary
                                 if (confirmed !== this.prevGuest.confirmed) {
                                     if (typeof confirmed === "boolean" || confirmed === "") {
-                                        fetch(`${config().apiUrl}/api/guests/${this.guestId}/confirm`, {
+                                        fetch(`${config().apiUrl}/api/guests/${this.guestId}/confirm/admin`, {
                                             method: 'PUT',
                                             headers: {
                                                 "Content-Type": "application/json"

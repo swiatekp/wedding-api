@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
 const db = require('../helpers/db');
-const config = require('../config');
-const jwt = require('jsonwebtoken');
-const { verifyToken } = require('../helpers/verifyToken');
+const { verifyUid } = require('../helpers/verifyUid');
 const logout = require('../helpers/logout');
 
 router.post('/', (req, res) => {
@@ -23,22 +21,10 @@ router.post('/', (req, res) => {
                         }
                         else {
                             const passwordHashed = crypto.createHash('sha256').update(req.body.password).digest('hex');
-                            const { login, firstName, lastName } = admin[0];
-                            if (admin[0].password === passwordHashed) {
-                                jwt.sign({
-                                    login,
-                                    firstName,
-                                    lastName
-                                }, config.jwtSecretKey, { expiresIn: '3h' }, (err, token) => {
-                                    if (err) {
-                                        res.status(500);
-                                        res.json({ error: 'Wewnętrzny błąd serwera' });
-                                    }
-                                    else {
-                                        req.session.token = token; //put the token in session
-                                        res.json({ message: 'Udało się' });
-                                    }
-                                })
+                            const { _id, password } = admin[0];
+                            if (password === passwordHashed) {
+                                req.session.uid = _id
+                                res.json({ message: 'Udało się' });
                             }
                             else {
                                 res.status(401);
@@ -67,27 +53,12 @@ router.post('/', (req, res) => {
         res.json({ error: 'No request body has been sent' });
     }
 });
-router.get('/', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
-        if (err) {
-            res.redirect('/loginform');
-        }
-        else {
-            res.redirect('/admin');
-        }
-    })
+router.get('/', verifyUid, (req, res) => {
+    res.redirect('/admin');
 });
-router.get('/logout', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err, authData) => {
-        if (err) {
-            res.status(403);
-            res.json({ error: 'Brak dostępu' });
-        }
-        else {
-            logout(req, res);
-        }
-    })
-})
+router.get('/logout', (req, res) => {
+    logout(req, res);
+});
 router.all('*', (req, res) => {
     res.status('400');
     res.json({ error: 'Bad request' });

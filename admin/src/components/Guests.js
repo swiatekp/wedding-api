@@ -21,7 +21,7 @@ class Guests extends Component {
         this.getGuests();
     }
     getGuests = () => {
-        fetch(`${config().apiUrl}/api/guests`, {
+        fetch(`${config().apiUrl}/api/guests/admin`, {
             method: 'GET',
         })
             .then(resp => resp.json())

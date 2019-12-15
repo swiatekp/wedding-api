@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
-const { verifyToken } = require('../helpers/verifyToken');
-const config = require('../config');
+const { verifyUid } = require('../helpers/verifyUid');
 
 //helpers
 const getGuests = require('../helpers/guests/getGuests'); //LIST OF ALL GUESTS - admin only
@@ -15,77 +13,40 @@ const editGuest = require('../helpers/guests/editGuest');
 const confirmAdmin = require('../helpers/guests/confirmAdmin');
 const confirmNonAdmin = require('../helpers/guests/confirmNonAdmin');
 
-router.get('/', verifyToken, (req, res) => {
-    //get all guests
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            getGuestNonAdmin(req, res);
-        }
-        else {
-            getGuests(req, res);
-        }
-    })
-});
+//IF A ROUTE SHOULD ONLY BE AVAILABLE FOR ADMIN - SIMPLY PUT THE verifyUid MIDDLEWARE IN IT
 
-router.get('/:id', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            //if not logged as admin, use the function with limited access
-            getGuestByIdNonAdmin(req, res);
-        }
-        else {
-            //if logged ass admin, use the function with unlimited access
-            getGuestByIdAdmin(req, res);
-        }
-    })
+router.get('/', (req, res) => {
+    //get guests for all users - limited access
+    getGuestNonAdmin(req, res);
 });
+router.get('/admin', verifyUid, (req, res) => {
+    //get guests for admins - unlimited access
+    getGuests(req, res);
+});
+router.get('/:id', (req, res) => {
+    getGuestByIdNonAdmin(req, res);
+});
+router.get('/:id/admin', verifyUid, (req, res) => {
+    getGuestByIdAdmin(req, res);
+})
 
-router.post('/', verifyToken, (req, res) => {
+router.post('/', verifyUid, (req, res) => {
     //adding a new guest - admin only
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            res.status(403);
-            res.json({ error: 'Forbidden' });
-        }
-        else {
-            addGuest(req, res);
-        }
-    })
+    addGuest(req, res);
 });
-router.delete('/:id', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            res.status(403);
-            res.json({ error: 'Forbidden' });
-        }
-        else {
-            deleteGuest(req, res);
-        }
-    })
+router.delete('/:id', verifyUid, (req, res) => {
+    deleteGuest(req, res);
 });
-router.put('/:id', verifyToken, (req, res) => {
+router.put('/:id', verifyUid, (req, res) => {
     //Guest edition - admin only
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            res.status(403);
-            res.json({ error: 'Forbidden' });
-        }
-        else {
-            editGuest(req, res);
-        }
-    })
+    editGuest(req, res);
 });
-router.put('/:id/confirm', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            confirmNonAdmin(req, res);
-        }
-        else {
-            confirmAdmin(req, res);
-        }
-    })
+router.put('/:id/confirm', (req, res) => {
+    confirmNonAdmin(req, res);
 });
-
+router.put('/:id/confirm/admin', verifyUid, (req, res) => {
+    confirmAdmin(req, res);
+});
 router.all('*', (req, res) => {
     res.status(400);
     res.json({ error: 'Bad request' });

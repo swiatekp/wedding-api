@@ -2,9 +2,8 @@ const config = require('../config');
 
 const express = require('express');
 const router = express.Router();
-const jwt = require('jsonwebtoken');
 
-const { verifyToken } = require('../helpers/verifyToken');
+const { verifyUid } = require('../helpers/verifyUid');
 const respondWithAnError = require('../helpers/guests/respondWithAnError');
 
 const post = require('../helpers/approachTips/post');
@@ -19,113 +18,39 @@ const changeImage = require('../helpers/approachTips/changeImage');
 const removeIllustration = require('../helpers/approachTips/removeIllustration');
 module.exports = router;
 
-router.get('/', verifyToken, (req, res) => {
-    //get all tips
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            getAllTips(req, res);
-        }
-    });
+router.get('/', (req, res) => {
+    getAllTips(req, res);
 });
-router.get('/by-category/:category', verifyToken, (req, res) => {
+router.get('/by-category/:category', verifyUid, (req, res) => {
     //get tips by category
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            getTipsByCategory(req, res);
-        }
-    });
+    getTipsByCategory(req, res);
 });
-router.get('/by-id/:id', verifyToken, (req, res) => {
+router.get('/by-id/:id', verifyUid, (req, res) => {
     //get tips by id
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            getTipsById(req, res);
-        }
-    });
+    getTipsById(req, res);
 });
-router.post('/', verifyToken, (req, res) => {
+router.post('/', verifyUid, (req, res) => {
     //add new Tip
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            post(req, res);
-        }
-    });
+    post(req, res);
 });
-router.delete('/:id', verifyToken, (req, res) => {
-    //remove tip
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            deleteTip(req, res);
-        }
-    });
+router.delete('/:id', verifyUid, (req, res) => {
+    deleteTip(req, res);
 });
-router.delete('/remove-illustration/:id', verifyToken, (req, res) => {
-    //remove tip
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            removeIllustration(req, res);
-        }
-    });
+router.delete('/remove-illustration/:id', verifyUid, (req, res) => {
+    removeIllustration(req, res);
 });
-router.put('/moveup/:id', verifyToken, (req, res) => {
+router.put('/moveup/:id', verifyUid, (req, res) => {
+    moveUp(req, res);
+});
+router.put('/movedown/:id', verifyUid, (req, res) => {
     //move the tip up the list
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            moveUp(req, res);
-        }
-    });
-});
-router.put('/movedown/:id', verifyToken, (req, res) => {
-    //move the tip up the list
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            moveDown(req, res);
-        };
-    });
+    moveDown(req, res);
 });
 
-router.put('/changeimage/:id', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            changeImage(req, res);
-        }
-    });
+router.put('/changeimage/:id', verifyUid, (req, res) => {
+    changeImage(req, res);
 });
 
-router.put('/:id', verifyToken, (req, res) => {
-    jwt.verify(req.token, config.jwtSecretKey, (err) => {
-        if (err) {
-            respondWithAnError(res, 403, 'Brak dostępu');
-        }
-        else {
-            edit(req, res);
-        }
-    });
+router.put('/:id', verifyUid, (req, res) => {
+    edit(req, res);
 });
