@@ -7,9 +7,6 @@ class Logout extends Component {
     componentDidMount() {
         fetch(`${config().apiUrl}/login/logout`, {
             method: 'GET',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`
-            }
         })
             .then(resp => resp.json())
             .then(resp => {

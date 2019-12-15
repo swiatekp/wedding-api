@@ -42,10 +42,7 @@ class Approach extends Component {
     }
     fetchTips = () => {
         fetch(`${config().apiUrl}/api/approach-tips`, {
-            method: 'GET',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`
-            }
+            method: 'GET'
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -123,10 +120,7 @@ class Approach extends Component {
 
     removeTip = id => {
         fetch(`${config().apiUrl}/api/approach-tips/${id}`, {
-            method: 'DELETE',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`,
-            },
+            method: 'DELETE'
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -156,9 +150,6 @@ class Approach extends Component {
 
                 fetch(`${config().apiUrl}/api/approach-tips`, {
                     method: 'POST',
-                    headers: {
-                        "Authorization": `Bearer ${this.props.bearer}`,
-                    },
                     body: data
                 })
                     .then(resp => resp.json())
@@ -255,10 +246,7 @@ class Approach extends Component {
     }
     moveUp = id => {
         fetch(`${config().apiUrl}/api/approach-tips/moveup/${id}`, {
-            method: 'PUT',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`
-            }
+            method: 'PUT'
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -276,9 +264,6 @@ class Approach extends Component {
     moveDown = id => {
         fetch(`${config().apiUrl}/api/approach-tips/movedown/${id}`, {
             method: 'PUT',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`
-            }
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -333,7 +318,7 @@ class Approach extends Component {
                     <td className=""><img className="approach-miniature" src={img} alt="Dojazd" /></td>
                     <td className="operations-cell">
                         <div className="approach-operations-container">
-                            <NavLink to={`/approach/edit/${tip._id}?bearer=${this.props.bearer}`} className="edit-button"></NavLink>
+                            <NavLink to={`/approach/edit/${tip._id}`} className="edit-button"></NavLink>
                             <button onClick={this.removeTip.bind(this.removeTip, tip._id)} className="remove-button"></button>
                             <div className="up-down-container">
                                 <button onClick={this.moveUp.bind(this.moveUp, tip._id)} className="up-button" />
@@ -383,7 +368,7 @@ class Approach extends Component {
                     <td className=""><img className="approach-miniature" src={img} alt="Dojazd" /></td>
                     <td className="operations-cell">
                         <div className="approach-operations-container">
-                            <NavLink to={`/approach/edit/${tip._id}?bearer=${this.props.bearer}`} className="edit-button"></NavLink>
+                            <NavLink to={`/approach/edit/${tip._id}`} className="edit-button"></NavLink>
                             <button onClick={this.removeTip.bind(this.removeTip, tip._id)} className="remove-button"></button>
                             <div className="up-down-container">
                                 <button onClick={this.moveUp.bind(this.moveUp, tip._id)} className="up-button" />

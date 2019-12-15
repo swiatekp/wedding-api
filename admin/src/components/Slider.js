@@ -13,46 +13,17 @@ import '../css/Slider.scss';
 
 class Slider extends Component {
     state = {}
-
-    bearer = window.location.search.substring(8);
-
     render = () => {
         return (
             <main>
                 <Switch>
-                    <Route path="/" exact render={() => {
-                        //Use this notation in order to pass props
-                        const component = React.createElement(Page, {
-                            bearer: this.bearer
-                        })
-                        return component;
-                    }}></Route>
+                    <Route path="/" exact component={Page}></Route>
                     <Route path="/guests/edit/:id/" component={EditGuest}></Route>
-                    <Route path="/guests" render={() => {
-                        const component = React.createElement(Guests, {
-                            bearer: this.bearer
-                        })
-                        return component;
-                    }}></Route>
+                    <Route path="/guests" component={Guests}></Route>
                     <Route path="/approach/edit/:id/" component={EditApproach}></Route>
-                    <Route path="/approach" render={() => {
-                        const component = React.createElement(Approach, {
-                            bearer: this.bearer
-                        })
-                        return component;
-                    }}></Route>
-                    <Route path="/account" render={() => {
-                        const component = React.createElement(Account, {
-                            bearer: this.bearer
-                        })
-                        return component;
-                    }}></Route>
-                    <Route path="/logout" render={() => {
-                        const component = React.createElement(Logout, {
-                            bearer: this.bearer
-                        })
-                        return component;
-                    }}></Route>
+                    <Route path="/approach" component={Approach}></Route>
+                    <Route path="/account" component={Account}></Route>
+                    <Route path="/logout" component={Logout}></Route>
                     <Route path="*" component={NotFound}></Route>
                 </Switch>
             </main>

@@ -21,7 +21,7 @@ form.addEventListener('submit', e => {
                 errorPrompt.innerText = "";
                 errorPrompt.style.display = "none";
 
-                window.location.replace(`../admin?bearer=${resp.token}`);
+                window.location.replace(`../admin`);
             }
         })
         .catch(err => {

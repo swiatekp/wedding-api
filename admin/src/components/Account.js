@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import '../css/Account.scss';
 import config from '../config';
-
 class Account extends Component {
     state = {
         login: '',
@@ -11,6 +10,7 @@ class Account extends Component {
         error: ''
     }
     nameRegex = /^[a-z0-9_\-.]{0,30}$/;
+
     loginChangeHandler = e => {
         const value = e.target.value;
 
@@ -38,7 +38,6 @@ class Account extends Component {
         fetch(`${config().apiUrl}/account/changepassword`, {
             method: 'POST',
             headers: {
-                "Authorization": `Bearer ${this.props.bearer}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ login, prevPassword, newPassword })

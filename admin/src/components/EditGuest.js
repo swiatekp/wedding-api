@@ -16,9 +16,6 @@ class EditGuest extends Component {
         },
         otherGuests: []
     }
-
-    bearer = window.location.search.substring(8);
-
     nameRegex = /^[a-z0-9ęóąśłżźćń ]{0,30}$/i;
     componentDidMount() {
         this.guestId = this.props.match.params.id;
@@ -34,10 +31,7 @@ class EditGuest extends Component {
     }
     getGuests = () => {
         fetch(`${config().apiUrl}/api/guests/`, {
-            method: 'GET',
-            headers: {
-                "Authorization": `Bearer ${this.bearer}`
-            }
+            method: 'GET'
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -158,7 +152,6 @@ class EditGuest extends Component {
                     fetch(`${config().apiUrl}/api/guests/${this.guestId}`, {
                         method: 'PUT',
                         headers: {
-                            "Authorization": `Bearer ${this.bearer}`,
                             "Content-Type": "application/json"
                         },
                         body: JSON.stringify({ firstName, surname, companionId })
@@ -175,7 +168,6 @@ class EditGuest extends Component {
                                         fetch(`${config().apiUrl}/api/guests/${this.guestId}/confirm`, {
                                             method: 'PUT',
                                             headers: {
-                                                "Authorization": `Bearer ${this.bearer}`,
                                                 "Content-Type": "application/json"
                                             },
                                             body: JSON.stringify({ confirmed })
@@ -227,7 +219,7 @@ class EditGuest extends Component {
         })
         return (
             <div className="edit-guest-container">
-                <p className="localization"><NavLink to={`/guests?bearer=${this.bearer}`}>Zarządzanie gośćmi</NavLink> > <NavLink to={`/guests/edit/${_id}?bearer=${this.bearer}`}>{`${firstName} ${surname}`}</NavLink></p>
+                <p className="localization"><NavLink to={`/guests`}>Zarządzanie gośćmi</NavLink> > <NavLink to={`/guests/edit/${_id}`}>{`${firstName} ${surname}`}</NavLink></p>
                 <h2>Edycja gościa</h2>
                 {this.state.error === "" ? null : <h3 className="error-prompt">{this.state.error}</h3>}
                 {this.state.message === "" ? null : <h3 className="message-prompt">{this.state.message}</h3>}
@@ -251,7 +243,7 @@ class EditGuest extends Component {
                     <button onClick={this.submitForm}>Zatwierdź</button>
                     <button onClick={this.resetForm}>Reset</button>
                 </form>
-                {companionId !== "" ? <NavLink className="companion-link" to={`/guests/edit/${companionId}?bearer=${this.bearer}`}>Przejdź do osoby towarzyszącej</NavLink> : null}
+                {companionId !== "" ? <NavLink className="companion-link" to={`/guests/edit/${companionId}`}>Przejdź do osoby towarzyszącej</NavLink> : null}
             </div>
         );
     }

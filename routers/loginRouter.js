@@ -35,7 +35,8 @@ router.post('/', (req, res) => {
                                         res.json({ error: 'Wewnętrzny błąd serwera' });
                                     }
                                     else {
-                                        res.json({ token });
+                                        req.session.token = token; //put the token in session
+                                        res.json({ message: 'Udało się' });
                                     }
                                 })
                             }

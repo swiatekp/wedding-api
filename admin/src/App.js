@@ -9,17 +9,15 @@ import Slider from './components/Slider';
 
 class App extends Component {
   state = {};
-
   componentDidMount() {
-    const bearer = window.location.search.substring(8);
-    this.setState({ bearer });
+    console.log(document.cookie);
   }
   render() {
     return (
       <Router basename={process.env.PUBLIC_URL + '/admin'}>
-        <Navbar bearer={this.state.bearer} />
+        <Navbar />
         <Header />
-        <Slider bearer={this.state.bearer} />
+        <Slider />
       </Router>
     );
   }

@@ -14,7 +14,6 @@ class EditApproach extends Component {
         illustrationError: '',
         illustrationMessage: ''
     }
-    bearer = window.location.search.substring(8);
 
     componentDidMount() {
         this.tipId = this.props.match.params.id;
@@ -24,9 +23,6 @@ class EditApproach extends Component {
     fetchTip = () => {
         fetch(`${config().apiUrl}/api/approach-tips/by-id/${this.tipId}`, {
             method: 'GET',
-            headers: {
-                "Authorization": `Bearer ${this.bearer}`
-            }
         })
             .then(resp => resp.json())
             .then(tip => {
@@ -96,7 +92,6 @@ class EditApproach extends Component {
                 fetch(`${config().apiUrl}/api/approach-tips/${this.tipId}`, {
                     method: 'PUT',
                     headers: {
-                        "Authorization": `Bearer ${this.bearer}`,
                         "Content-Type": "application/json"
                     },
                     body: JSON.stringify({ category, content })
@@ -129,9 +124,6 @@ class EditApproach extends Component {
 
             fetch(`${config().apiUrl}/api/approach-tips/changeImage/${this.tipId}`, {
                 method: 'PUT',
-                headers: {
-                    "Authorization": `Bearer ${this.bearer}`,
-                },
                 body: data
             })
                 .then(resp => resp.json())
@@ -164,9 +156,6 @@ class EditApproach extends Component {
         e.preventDefault();
         fetch(`${config().apiUrl}/api/approach-tips/remove-illustration/${this.tipId}`, {
             method: 'DELETE',
-            headers: {
-                "Authorization": `Bearer ${this.bearer}`,
-            }
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -193,7 +182,7 @@ class EditApproach extends Component {
         filename ? img = `${config().apiUrl}/uploads/${filename}` : img = noMiniature;
         return (
             <div className="edit-approach-container">
-                <p className="localization"><NavLink to={`/approach?bearer=${this.bearer}`}>Wskazówki dojazdu</NavLink> > <NavLink to={`/approach/edit/${_id}?bearer=${this.bearer}`}>Edycja wskazówki</NavLink></p>
+                <p className="localization"><NavLink to={`/approach`}>Wskazówki dojazdu</NavLink> > <NavLink to={`/approach/edit/${_id}`}>Edycja wskazówki</NavLink></p>
 
                 {Object.keys(this.state.tip).length > 0 ?
                     <>

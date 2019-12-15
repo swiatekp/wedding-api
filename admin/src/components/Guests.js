@@ -23,9 +23,6 @@ class Guests extends Component {
     getGuests = () => {
         fetch(`${config().apiUrl}/api/guests`, {
             method: 'GET',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`
-            }
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -43,9 +40,6 @@ class Guests extends Component {
     removeGuest = (id) => {
         fetch(`${config().apiUrl}/api/guests/${id}`, {
             method: 'DELETE',
-            headers: {
-                "Authorization": `Bearer ${this.props.bearer}`
-            }
         })
             .then(resp => resp.json())
             .then(resp => {
@@ -136,7 +130,6 @@ class Guests extends Component {
         fetch(`${config().apiUrl}/api/guests`, {
             method: 'POST',
             headers: {
-                "Authorization": `Bearer ${this.props.bearer}`,
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ firstName, surname, companionId })
@@ -277,7 +270,7 @@ class Guests extends Component {
                                                 <td className="hideOnMobile">{companionName}</td>
                                                 <td>{guest.token}</td>
                                                 <td className="operations-cell">
-                                                    <NavLink className="edit-button" to={`/guests/edit/${guest._id}?bearer=${this.props.bearer}`}></NavLink>
+                                                    <NavLink className="edit-button" to={`/guests/edit/${guest._id}`}></NavLink>
                                                     <button className="remove-button" onClick={this.removeGuest.bind(this.removeGuest, guest._id)}></button>
                                                 </td>
                                             </tr>
