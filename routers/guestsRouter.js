@@ -7,11 +7,13 @@ const getGuests = require('../helpers/guests/getGuests'); //LIST OF ALL GUESTS -
 const getGuestNonAdmin = require('../helpers/guests/getGuestNonAdmin'); //Get guest by name, surname and token
 const getGuestByIdAdmin = require('../helpers/guests/getGuestByIdAdmin'); // Get guests by id - version for admin
 const getGuestByIdNonAdmin = require('../helpers/guests/getGuestByIdNonAdmin'); //Get guest by id and token - version for guests
+const getGuestByName = require('../helpers/guests/getGuestByName');
 const addGuest = require('../helpers/guests/addGuest');
 const deleteGuest = require('../helpers/guests/deleteGuest');
 const editGuest = require('../helpers/guests/editGuest');
 const confirmAdmin = require('../helpers/guests/confirmAdmin');
 const confirmNonAdmin = require('../helpers/guests/confirmNonAdmin');
+const changeCompanionName = require('../helpers/guests/changeCompanionName');
 
 //IF A ROUTE SHOULD ONLY BE AVAILABLE FOR ADMIN - SIMPLY PUT THE verifyUid MIDDLEWARE IN IT
 
@@ -23,13 +25,15 @@ router.get('/admin', verifyUid, (req, res) => {
     //get guests for admins - unlimited access
     getGuests(req, res);
 });
-router.get('/:id', (req, res) => {
+router.post('/by-name', (req, res) => {
+    getGuestByName(req, res);
+});
+router.post('/:id', (req, res) => {
     getGuestByIdNonAdmin(req, res);
 });
 router.get('/:id/admin', verifyUid, (req, res) => {
     getGuestByIdAdmin(req, res);
-})
-
+});
 router.post('/', verifyUid, (req, res) => {
     //adding a new guest - admin only
     addGuest(req, res);
@@ -47,9 +51,13 @@ router.put('/:id/confirm', (req, res) => {
 router.put('/:id/confirm/admin', verifyUid, (req, res) => {
     confirmAdmin(req, res);
 });
+router.put('/:id/change-companion-name', (req, res) => {
+    //IT SHOULD BE THE MAIN GUESTS' ID - NOT COMPANIONS'
+    changeCompanionName(req, res);
+})
 router.all('*', (req, res) => {
     res.status(400);
-    res.json({ error: 'Bad request' });
+    res.json({ error: 'Nieprawidłowe zapytanie' });
 })
 
 module.exports = router;
