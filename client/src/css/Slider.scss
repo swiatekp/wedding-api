@@ -1,0 +1,153 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+
+main {
+    width:100%;
+    font-size:12px;
+    @media(min-width:600px) {
+        font-size:16px;
+    }
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    p {
+        width:100%;
+        text-align:justify;
+        margin-bottom:10px;
+    }
+    flex:8;
+}
+.main-content {
+    background-color:#FFFFFF;
+    opacity:0.90;
+    border-top:1px solid $grey2;
+    border-bottom:1px solid $grey2;
+    padding: 20px 20px 20px 20px;
+    min-height:80%;
+    width:100%;
+    align-self:stretch;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    @media(min-width:600px) {
+        width:70%;
+        border:1px solid $grey2;
+        border-radius:4px;
+    }
+    @media(min-width:900px) {
+        width: 55%;
+    }
+}
+.slider-container {
+    overflow-y:scroll;
+    margin-bottom:auto;
+    max-height:50vh;
+    padding:20px;
+}
+::-webkit-scrollbar {
+    -webkit-appearance:none;
+    width:8px;
+}
+::-webkit-scrollbar-track {
+    background:$grey2; 
+}
+::-webkit-scrollbar-thumb {
+    background:$grey3;
+}
+::-webkit-scrollbar-thumb:hover {
+    background:$grey1; 
+}
+
+::-ms-scrollbar {
+    -webkit-appearance:none;
+    width:8px;
+}
+::-ms-scrollbar-track {
+    background:$grey2; 
+}
+::-ms-scrollbar-thumb {
+    background:$grey3;
+}
+::-ms-scrollbar-thumb:hover {
+    background:$grey1; 
+}
+
+.no-overflow {
+    overflow:hidden;
+}
+.no-overflow {
+    overflow:hidden;
+}
+.slider-button {
+    display:none;
+    margin: 0 15px 0 5px;
+    font-family:'Parisienne', cursive;
+    font-size:70px;
+    color:$grey3;
+    transition:0.2s;
+    text-decoration:none;
+    @media(min-width:600px) {
+        display:block;
+    }
+}
+.slider-button:first-child {
+    margin: 0 25px 0 5px;
+}
+.slider-button:last-child {
+    margin: 0 5px 0 25px;
+}
+.slider-button:hover {
+    color:$rose;
+    transform:scale(2);
+}
+.slider-button:focus {
+    outline:0;
+    color: $rose;
+}
+.dots-container {
+    display:flex;
+    width:100%;
+    justify-content:center;
+    margin-top:auto;
+    padding: 10px 0 0 0;
+}
+.slider-dot {
+    display:block;
+    width: 18px;
+    height:18px;
+    background-color:transparent;
+    
+    opacity:0.7;
+
+    border-radius: 50%;
+    border: 3px solid $grey3;
+    
+    margin-right:10px;
+
+    transition:0.2s
+}
+.slider-dot:last-child {
+    margin-right:0;
+}
+.slider-dot:focus {
+    outline:0;
+}
+.slider-dot:hover {
+    border-color:$rose;
+    transform:scale(1.2);
+}
+.slider-dot.active {
+    background-color:$grey3;
+}
+.slider-dot.active:hover {
+    background-color:$rose;
+}
+.react-swipeable-view-container>div {
+    margin-top:auto;
+    margin-bottom:auto;
+}

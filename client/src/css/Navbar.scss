@@ -1,0 +1,75 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+
+nav {
+    flex:1;
+    width:100%;
+    ul {
+        list-style-type:none;
+        width:100%;
+        display:flex;
+        flex-wrap:nowrap;
+        justify-content:center;
+        padding:10px 0 10px 0;
+    }
+    li {
+        margin-right:15px;
+    }
+    li:last-child {
+        margin:0
+    }
+    .nav-link {
+        color:transparent;
+        display:block;
+        width: 40px;
+        height: 40px;
+        background-repeat:no-repeat;
+        background-position:center center;
+        background-size:cover;
+        transition: 0.3s;
+    }
+    .nav-link:hover {
+        transform:rotate(-1deg);
+    }
+    .info-icon {
+        background-image:url('../img/mobile/info.svg');
+    }
+    .info-icon:hover {
+        background-image:url('../img/mobile/info-hover.svg');
+    }
+    .approach-icon {
+        background-image:url('../img/mobile/approach.svg');
+    }
+    .approach-icon:hover {
+        background-image:url('../img/mobile/approach-hover.svg');
+    }
+    .confirm-icon {
+        background-image:url('../img/mobile/confirm.svg');
+    }
+    .confirm-icon:hover {
+        background-image:url('../img/mobile/confirm-hover.svg');
+    }
+    .contact-icon {
+        background-image:url('../img/mobile/contact.svg');
+    }
+    .contact-icon:hover {
+        background-image:url('../img/mobile/contact-hover.svg');
+    }
+    @media(min-width:600px) {
+        .nav-link {
+            color:$grey1;
+            background-image:none;
+            width:auto;
+            height:auto;
+            text-decoration:none;
+            text-transform:uppercase;
+        }
+        .nav-link:hover {
+            background-image:none;
+            color:$rose;
+        }
+    }
+}

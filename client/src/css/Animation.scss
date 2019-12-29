@@ -1,0 +1,40 @@
+nav {
+    animation: nav-animation 2s cubic-bezier(0.175, 0.885, 0.320, 1.275) both;
+    animation-delay:3s;
+}
+header {
+    animation:header-animation 2s ease-out both;
+    animation-delay:1s;
+}
+main {
+    animation: main-animation  2s  ease-out both;
+    animation-delay:2s !important;
+}
+@keyframes nav-animation {
+    0% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}
+@keyframes header-animation {
+    0% {
+        transform:translateY(33vh);
+    }
+    60% {
+        transform:translateY(33vh);
+    }
+    100% {
+        transform:translateY(0);
+    }
+}
+
+@keyframes main-animation {
+    0% {
+        opacity:0;
+    }
+    100% {
+        opacity:1;
+    }
+}

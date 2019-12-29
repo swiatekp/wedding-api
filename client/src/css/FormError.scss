@@ -1,0 +1,29 @@
+$grey1:#5A5656;
+$grey2: rgb(252, 248, 248);
+$grey3: #c9c9c9;
+$rose2: rgb(252, 229, 248);
+
+.error-prompt {
+    position:fixed;
+    z-index:1;
+    background-color:$grey2;
+    opacity:0.9;
+    border:1px solid $grey3;
+    border-radius:3px;
+
+    padding:10px 20px 10px 20px;
+
+    animation: slide-in-error 0.5s ease-in both;
+}
+@keyframes slide-in-error {
+    0% {
+      transform: translateY(-1000px) scaleY(2.5) scaleX(0.2);
+      transform-origin: 50% 0%;
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0) scaleY(1) scaleX(1);
+      transform-origin: 50% 50%;
+      opacity: 1;
+    }
+  }

@@ -1,0 +1,33 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+* {
+    box-sizing:border-box;
+    margin:0;
+    padding:0
+}
+a {
+    text-decoration:none;
+}
+#App {
+    width: 100%;
+    min-height:100vh;
+    padding-bottom:10vh;
+
+    background-color: $background;
+    background-image:url('./../img/bg.png');
+    background-repeat:no-repeat;
+    background-position:center 50vh;
+
+    font-family: 'Palanquin', sans-serif;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:center;
+}
+p {
+    text-align:justify;
+}

@@ -1,0 +1,31 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+.approach {
+    border:0;
+
+    background-color:transparent;
+
+    font-size: 15px;
+    color:$grey3;
+    font-family:'Roboto Mono', sans-serif;
+
+    display:flex;
+    align-items:center;
+
+    margin: 30px auto 30px auto;
+
+    transition: 0.2s;
+}
+.approach:hover {
+    color:$rose;
+    transform:scale(1.1);
+}
+.approach:focus {
+    outline:none;
+}
+.approach>span {
+    margin-right:20px;
+}

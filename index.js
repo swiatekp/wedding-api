@@ -60,3 +60,10 @@ app.use('/page', pageRouter);
 app.use('/account', accountRouter);
 app.use('/api/approach-tips', approachTipsRouter);
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// app.use('/wedding/static', express.static(path.join(__dirname, 'client/build/static')));
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.use('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build/index.html'));
+    //routing on the front-end is done by react-router, so it's enough to send index.html. Frontend does the rest
+})

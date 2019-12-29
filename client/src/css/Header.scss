@@ -1,0 +1,30 @@
+$background:#F7F8FA;
+$grey1:#5A5656;
+$grey2: #DDDDDD;
+$grey3: #828282;
+$rose: #FDA0EE;
+
+header {
+    font-family:'Parisienne', cursive;
+    text-align:center;
+    margin: 20px 0 20px 0;
+    color:$grey1;
+
+    flex:1;
+    h1 {
+        font-size: 45px;
+        font-weight:normal;
+    }
+    h2 {
+        font-size:22px;
+        font-weight:normal;
+    }
+    @media(min-width:600px) {
+        h1 {
+            font-size:60px;
+        }
+        h2 {
+            font-size:30px;
+        }
+    }
+}
